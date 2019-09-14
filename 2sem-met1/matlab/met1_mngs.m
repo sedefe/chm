@@ -1,5 +1,5 @@
 function [X, Y] = met1_mngs(A, b, x0, eps)
-%MY_MNGS     this method should numerically find min(y),
+%MET1_MNGS	this method should numerically find min(y),
 %     where y = 1/2*x'*A*x + b'*x
 %     :param A: matrix NxN
 %     :param b: matrix Nx1
