@@ -24,6 +24,9 @@ for i = 1:numel(Xs)
     Y0 = met2_func(X);  % here's your function (change met2_func.m)
     
     P = met2_interpol(X, Y0);  % here's your interpolation (change met2_interpol.m)
+    
+    assert(numel(P) == N+1)
+    
     Y2 = polyval(P, X_dense);
     
     figure(1), hold on

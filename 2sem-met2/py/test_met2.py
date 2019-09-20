@@ -10,7 +10,7 @@ default_student = 0
 def test_met2(student):
     print(f'running met1 test for student #{student}')
     N = 5
-    M = 10
+    M = 10*N
     A = -1  # change to what you prefer
     B = 3   # change to what you prefer
 
