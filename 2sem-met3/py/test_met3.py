@@ -17,11 +17,14 @@ def test_met3():
     y1 = met3.func(x1)
 
     # here's your approximation (change met3.approx())
-    y_algpoly = met3.approx(x0, y0, x1, met3.ApproxType.algebraic, dim)
-    y_legpoly = met3.approx(x0, y0, x1, met3.ApproxType.legendre, dim)
+    y_algpoly, _, p_algpoly = met3.approx(x0, y0, x1, met3.ApproxType.algebraic, dim)
+    y_legpoly, _, p_legpoly = met3.approx(x0, y0, x1, met3.ApproxType.legendre, dim)
 
     assert(all(abs(y1 - y_algpoly) < 1))
     assert(all(abs(y1 - y_legpoly) < 1))
+    assert(len(p_algpoly) == dim)
+    assert(len(p_legpoly) == dim)
+    # assert(all(abs(p_algpoly - p_legpoly) < 1e-3))
 
     plt.figure(1)
     plt.title('Y(X)')

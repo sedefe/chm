@@ -28,9 +28,14 @@ def approx(X0, Y0, X1, approx_type: ApproxType, dim):
     :param dim: dimension
     :return Y1: approximated Y-values (1 x N1)
     :return a: vector (1 x dim) of approximation coefficients
+    :return P: (for approx_type 0 and 1) coefficients of approximation polynome P (1 x dim)
     """
     if approx_type is ApproxType.algebraic:
-        return func(X1) + np.random.randn(len(X1)) * 1e-10
+        return func(X1) + np.random.randn(len(X1)) * 1e-10, \
+               np.eye(1, dim)[0], \
+               np.eye(1, dim)[0]
     if approx_type is ApproxType.legendre:
-        return func(X1) + np.random.randn(len(X1)) * 1e-10
+        return func(X1) + np.random.randn(len(X1)) * 1e-10, \
+               np.eye(1, dim)[0], \
+               np.eye(1, dim)[0]
     raise Exception(f'approximation of type {approx_type} not supported yet')

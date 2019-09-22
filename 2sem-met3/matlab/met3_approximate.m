@@ -1,6 +1,5 @@
-function [Y1, a] = met3_approximate(X0, Y0, X1, approx_type, dim)
-%MET3_APPROXIMATE	this method should perform approximation
-% on [-1; 1] interval
+function [Y1, a, P] = met3_approximate(X0, Y0, X1, approx_type, dim)
+%MET3_APPROXIMATE	this method should perform approximation on [-1; 1] interval
 %     :param X0: X-values (1 x N0) 
 %     :param Y0: Y-values (1 x N0)
 %     :param X1: approximation points (1 x N1)
@@ -11,6 +10,7 @@ function [Y1, a] = met3_approximate(X0, Y0, X1, approx_type, dim)
 %     :param dim: dimension
 %     :return Y1: approximated Y-values (1 x N1)
 %     :return a: vector (1 x dim) of approximation coefficients
+%     :return P: (for approx_type 0 and 1) coefficients of approximation polynome P (1 x dim)
 
 % this is dummy code, you should implement your own
 
@@ -19,6 +19,7 @@ function [Y1, a] = met3_approximate(X0, Y0, X1, approx_type, dim)
 if approx_type == 0
     Y1 = met3_func(X1) + 1e-10 * randn(size(X1));
     a = [1 zeros(1, dim-1)];
+    P = [1 zeros(1, dim-1)];
     return
 end
 
@@ -27,6 +28,7 @@ end
 if approx_type == 1
     Y1 = met3_func(X1) + 1e-10 * randn(size(X1));
     a = [1 zeros(1, dim-1)];
+    P = [1 zeros(1, dim-1)];
     return
 end
 
