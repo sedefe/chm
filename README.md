@@ -1,7 +1,7 @@
 # Repo for computational tasks.
 
 Each task can be solved in MATLAB or Python, look corresponding folders for code examples and test scripts.
-You should write the code that solves the problem and is verified by test script. Check read.me files for details (in Russian!).
+You should write the code that solves the problem and is verified by test script. Check readme.md files in subfolders for details (in Russian!).
 
 ## Common MATLAB code structure:
 * `matlab/test_met*.m` - test script that runs your solutions.
