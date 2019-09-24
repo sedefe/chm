@@ -29,7 +29,7 @@ def test_met2(student):
         Y0 = met2.func(X)  # here's your function (change met2.func())
 
         P = met2.interpol(X, Y0)    # here's your interpolation (change met2.interpol())
-        assert len(P) == N+1
+        assert len(P) == N+1, f'polynome length should be {N+1}'
         Y2 = np.polyval(P, X_dense)
 
         plt.figure(1)

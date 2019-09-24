@@ -20,7 +20,8 @@ for n_dim = [2, 3]
     b = b(1:n_dim);
     x0 = x0(1:n_dim);
     
-    eps = 1e-6;
+    eps_y = 1e-6;
+    eps_x = 1e-3;
 
     methods = {'met1_mngs', 'met1_mps'};
 
@@ -32,14 +33,17 @@ for n_dim = [2, 3]
     for i = 1:numel(methods)
         method = methods{i};
         disp(['running ', method, ' test for student #', num2str(student)])
-        [X, Y] = feval(method, A, b, x0, eps);
+        [X, Y] = feval(method, A, b, x0, eps_y);
 
         x1 = linsolve(A, -b);
         y1 = 1/2*x1'*A*x1 + b'*x1;
 
-        assert(all(x0 == X(:,1)))
-        assert(norm(x1 - X(:, end)) < 1e-3)
-        assert(norm(y1 - Y(:, end)) < eps)
+        assert(all(x0 == X(:,1)), ...
+            'X should start with initial point')
+        assert(norm(x1 - X(:, end)) < eps_x, ...
+            'last X should be close enough to the optimum')
+        assert(norm(y1 - Y(:, end)) < eps_y, ...
+            'last Y should be close enough to the optimum')
         plot(-log10(Y - y1), styles{i})
     end
     xlabel('номер итерации')

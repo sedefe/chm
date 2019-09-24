@@ -25,7 +25,8 @@ for i = 1:numel(Xs)
     
     P = met2_interpol(X, Y0);  % here's your interpolation (change met2_interpol.m)
     
-    assert(numel(P) == N+1)
+    assert(numel(P) == N+1, ...
+        ['polynome length should be ' num2str(N+1)])
     
     Y2 = polyval(P, X_dense);
     
