@@ -14,3 +14,4 @@ You should write the code that solves the problem and is verified by test script
 * `py/met*.py` - dummy code, you should replace it with yours.
 
 Feel free to ask.
+sagoyewatha@mail.ru
