@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+from scipy import interpolate
 import matplotlib.pyplot as plt
 import met2
 
@@ -37,12 +38,17 @@ def test_met2(student):
         plt.figure(2)
         plt.plot(X_dense, np.log10(np.abs(Y_dense - Y2)), styles[i], label=labels[i])
 
+    Y_spline = interpolate.CubicSpline(X_eq, met2.func(X_eq))(X_dense)
+
     plt.figure(1)
     plt.title('Y(X)')
+    plt.plot(X_dense, Y_spline, 'c', label='spline')
     plt.legend()
 
     plt.figure(2)
     plt.title('log error')
+    plt.plot(X_dense, np.log10(np.abs(Y_dense - Y_spline)), 'c', label='spline')
     plt.legend()
+
     plt.show()
 
