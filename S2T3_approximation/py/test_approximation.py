@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
-from s2_approximation.py import approximation
+from S2T3_approximation.py import approximation
 
 
 def test_approximation():

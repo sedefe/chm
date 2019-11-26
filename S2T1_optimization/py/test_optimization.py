@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
-from s2_optimization.py import optimization
+from S2T1_optimization.py import optimization
 
 default_student = 0
 

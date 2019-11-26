@@ -3,7 +3,7 @@ import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
-from s2_interpolation.py import interpolation
+from S2T2_interpolation.py import interpolation
 
 default_student = 0
 
