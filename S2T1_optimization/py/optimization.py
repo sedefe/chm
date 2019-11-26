@@ -1,4 +1,13 @@
 import numpy as np
+from utils.utils import call_counter
+
+
+@call_counter
+def func(A, b, x):
+    """
+    this method implements target function y = 1/2*x.T*A*x + b.T*x, leave it unchanged
+    """
+    return (1 / 2 * x.T @ A @ x + b.T @ x).item()
 
 
 def mngs(A, b, x0, eps):
@@ -11,13 +20,10 @@ def mngs(A, b, x0, eps):
     :param eps: accuracy (see test_met1())
     :return: list of x, list of y
     """
-    def func(x):
-        return (1 / 2 * x.T @ A @ x + b.T @ x).item()
-
     # this is dummy code, you should implement your own
     x1 = np.linalg.solve(A, -b)
     X = [(x1*p + x0*(1-p)) for p in np.linspace(0, 1-eps, 10)]
-    Y = [func(x) for x in X]
+    Y = [func(A, b, x) for x in X]
     return X, Y
 
 

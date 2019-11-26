@@ -10,7 +10,7 @@
 
 * `py/`
   * `test_approximation.py` - тест, который запускает вашу реализацию аппроксимации.
-  * `approximation.py` - тут должны быть ваши func(x) и approx(X0, Y0, X1, approx_type, dim).
+  * `approximation.py` - тут должны быть ваши `func()` и `approx()`.
 
 ---
 (*) Требуемые типы аппроксимации:

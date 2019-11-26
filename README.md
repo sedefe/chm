@@ -13,5 +13,20 @@ You should write the code that solves the problem and is verified by test script
   - set pytest as PyCharm default test runner and press `Run test` at `def test_<task_name>():` row.
 * `py/<task_name>.py` - dummy code, you should replace it with yours.
 
+## Task list:
+### Term 1.
+* `S1T0_types_convertions`
+* [_TBD_] `S1T1_compute_function`
+* [_TBD_] `S1T2_solve_linear_system`
+* [_TBD_] `S1T3_newton_method`
+### Term 2.
+* `S2T1_optimization`
+* `S2T2_interpolation`
+* `S2T3_approximation`
+### Term 3.
+* [_TBD_] `S3T1_integration`
+* [_TBD_] `S3T2_solve_ode`
+
 Feel free to ask.
+
 sagoyewatha@mail.ru

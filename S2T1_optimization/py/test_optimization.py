@@ -30,6 +30,7 @@ def test_optimization(student, n_dim):
     plt.xlabel('номер итерации')
     plt.ylabel('точность')
     for i, method in enumerate(methods):
+        optimization.func.calls = 0
         X, Y = getattr(optimization, method)(A, b, x0, eps_y)
 
         x1 = np.linalg.solve(A, -b)
@@ -38,6 +39,8 @@ def test_optimization(student, n_dim):
         assert np.equal(x0, X[0]).all(), 'X should start with initial point'
         assert np.linalg.norm(x1 - X[-1]) < eps_x, 'last X should be close enough to the optimum'
         assert np.linalg.norm(y1 - Y[-1]) < eps_y, 'last Y should be close enough to the optimum'
+        assert optimization.func.calls == len(Y), f'function was called {optimization.func.calls} times, ' \
+                                                  f'but there is {len(Y)} point in the output'
 
         plt.plot(-np.log10([y - y1 for y in Y]), styles[i])
     plt.legend(methods)

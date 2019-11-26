@@ -9,4 +9,4 @@
 
 * `py/`
   * `test_interpolation.py` - тест, который запускает вашу реализацию интерполяции. Нужно заменить A и B.
-  * `interpolation.py` - тут должны быть ваши func(x) и interpol(X, Y).
+  * `interpolation.py` - тут должны быть ваши `func()` и `interpol()`.
