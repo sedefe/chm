@@ -27,6 +27,15 @@ def runge(s0, s1, m, L):
     return d0, d1
 
 
+def aitken(s0, s1, s2, L):
+    """
+    estimate accuracy degree
+    s0, s1, s2: consecutive composite quads
+    return: accuracy degree estimation
+    """
+    raise NotImplementedError
+
+
 def quad(func, x0, x1, xs, **kwargs):
     """
     func: function to integrate
@@ -51,15 +60,6 @@ def composite_quad(func, x0, x1, n_intervals, n_nodes, **kwargs):
     x0, x1: interval to integrate on
     n_intervals: number of intervals
     n_nodes: number of nodes on each interval
-    """
-    raise NotImplementedError
-
-
-def aitken(s0, s1, s2, L):
-    """
-    estimate accuracy degree
-    s0, s1, s2: consecutive composite quads
-    return: accuracy degree estimation
     """
     raise NotImplementedError
 

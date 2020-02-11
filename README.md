@@ -24,7 +24,7 @@ You should write the code that solves the problem and is verified by test script
 * `S2T2_interpolation`
 * `S2T3_approximation`
 ### Term 3.
-* [_TBD_] `S3T1_integration`
+* `S3T1_integration`
 * [_TBD_] `S3T2_solve_ode`
 
 Feel free to ask.
