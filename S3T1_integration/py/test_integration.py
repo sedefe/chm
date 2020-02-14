@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 from utils.integrate_collection import Monome, Harmonic
 
 from utils.utils import get_log_error
-from S3T1_integration.integration import (quad,
-                                          quad_gauss,
-                                          composite_quad,
-                                          integrate,
-                                          aitken)
+from S3T1_integration.py.integration import (quad,
+                                             quad_gauss,
+                                             composite_quad,
+                                             integrate,
+                                             aitken)
 
 
 def test_quad_degree():
@@ -31,9 +31,9 @@ def test_quad_degree():
         accuracy[np.isinf(accuracy)] = 17
 
         # check accuracy is good enough
-        for node_count, error in zip(max_node_count, accuracy):
+        for node_count, acc in zip(max_node_count, accuracy):
             if node_count >= deg + 1:
-                assert error > 6
+                assert acc > 6
 
         plt.plot(max_node_count, accuracy, '.:', label=f'x^{deg}')
 
@@ -62,9 +62,9 @@ def test_quad_gauss_degree():
         accuracy[np.isinf(accuracy)] = 17
 
         # check accuracy is good enough
-        for node_count, error in zip(max_node_count, accuracy):
+        for node_count, acc in zip(max_node_count, accuracy):
             if 2 * node_count >= deg + 1:
-                assert error > 6
+                assert acc > 6
 
         plt.plot(max_node_count, accuracy, '.:', label=f'x^{deg}')
 
