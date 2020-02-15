@@ -29,6 +29,8 @@ You should write the code that solves the problem and is verified by test script
 
 Feel free to ask.
 
+sagoyewatha@mail.ru
+
 https://t.me/chm_1sem
 
 https://t.me/chm_3sem
