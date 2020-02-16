@@ -16,7 +16,7 @@ You should write the code that solves the problem and is verified by test script
 ## Task list:
 ### Term 1.
 * `S1T0_types_convertions`
-* [_TBD_] `S1T1_compute_function`
+* `S1T1_compute_function`
 * [_TBD_] `S1T2_solve_linear_system`
 * [_TBD_] `S1T3_newton_method`
 ### Term 2.
