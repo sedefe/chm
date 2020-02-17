@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def weight(degree, a, b, alpha=0, beta=0):
+def weight(degree, a, b, alpha=0., beta=0.):
     """
     integrate (x**degree / (x-a) ** alpha / (b-x) ** beta) from a to b
     """
@@ -41,6 +41,7 @@ def quad(func, x0, x1, xs, **kwargs):
     func: function to integrate
     x0, x1: interval to integrate on
     xs: nodes
+    **kwargs passed to weight
     """
     raise NotImplementedError
 

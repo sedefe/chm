@@ -5,6 +5,7 @@
 * `py/`
 	* `test_integration.py` - набор тестов:
 		* `test_quad_degree()` - проверит АСТ для ИКФ
+		* `test_weighted_quad_degree()` - проверит АСТ для ИКФ с весами (несобственные интегралы)
 		* `test_quad_gauss_degree()` - проверит АСТ для ИКФ типа Гаусса
 		* `test_composite_quad()` - проверит сходимость СКФ
 		* `test_integrate()` - проверит интегрирование с заданной точностью

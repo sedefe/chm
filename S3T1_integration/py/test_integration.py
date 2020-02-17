@@ -8,7 +8,8 @@ from S3T1_integration.py.integration import (quad,
                                              quad_gauss,
                                              composite_quad,
                                              integrate,
-                                             aitken)
+                                             aitken,
+                                             weight)
 
 
 def test_quad_degree():
@@ -42,6 +43,34 @@ def test_quad_degree():
     plt.xlabel('node_count')
     plt.suptitle(f'test quad')
     plt.show()
+
+
+def test_weighted_quad_degree():
+    """
+    check weighed quadrature degree
+    """
+    x0, x1 = 1, 3
+    alpha = 0.14
+    beta = 0.88
+
+    max_degree = 7
+    for deg in range(1, max_degree):
+        p = Monome(deg)
+        xs = np.linspace(x0, x1, 6)[1:-1]  # 4 points => accuracy degree is 3
+
+        res = quad(p, x0, x1, xs, alpha=alpha)
+        ans = weight(deg, x0, x1, alpha=alpha)
+        d = abs(res - ans)
+        print(f'{deg:2}-a: {res:8.3f} vs {ans:8.3f}, delta = {d:e}')
+        if deg < len(xs):
+            assert d < 1e-6
+
+        res = quad(p, x0, x1, xs, beta=beta)
+        ans = weight(deg, x0, x1, beta=beta)
+        d = abs(res - ans)
+        print(f'{deg:2}-b: {res:8.3f} vs {ans:8.3f}, delta = {d:e}')
+        if deg < len(xs):
+            assert d < 1e-6
 
 
 def test_quad_gauss_degree():
