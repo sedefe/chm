@@ -18,7 +18,7 @@ You should write the code that solves the problem and is verified by test script
 * `S1T0_types_convertions`
 * `S1T1_compute_function`
 * `S1T2_solve_linear_system`
-* [_TBD_] `S1T3_newton_method`
+* `S1T3_newton_method`
 ### Term 2.
 * `S2T1_optimization`
 * `S2T2_interpolation`
