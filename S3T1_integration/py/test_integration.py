@@ -127,6 +127,8 @@ def test_composite_quad():
         plt.plot(x, k*x+b, 'b:', label=f'{k:.2f}*x+{b:.2f}')
         plt.plot(x, aitken_degree*x+b, 'm:', label=f'aitken estimation')
         plt.plot(x, accuracy, 'kh', label=f'accuracy for x^{degree}')
+        plt.xlabel('log10(node count)')
+        plt.ylabel('accuracy')
         plt.legend()
 
         assert np.abs(aitken_degree - k) < 0.5, \
