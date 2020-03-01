@@ -1,12 +1,12 @@
-Методичка: http://www.apmath.spbu.ru/ru/structure/depts/is/task4-2016.pdf
+РњРµС‚РѕРґРёС‡РєР°: http://www.apmath.spbu.ru/ru/structure/depts/is/task4-2016.pdf
 
-Во вложении тесты для ваших реализаций метода Ньютона.
+Р’Рѕ РІР»РѕР¶РµРЅРёРё С‚РµСЃС‚С‹ РґР»СЏ РІР°С€РёС… СЂРµР°Р»РёР·Р°С†РёР№ РјРµС‚РѕРґР° РќСЊСЋС‚РѕРЅР°.
 
 * `py/`
-	* `test_newton_method.py` - набор тестов:
-		* `test_solve_scalar()` - проверит `solve_scalar()`
-		* `test_solve_plane()` - проверит `solve_plane()`
+	* `test_newton_method.py` - РЅР°Р±РѕСЂ С‚РµСЃС‚РѕРІ:
+		* `test_solve_scalar()` - РїСЂРѕРІРµСЂРёС‚ `solve_scalar()`
+		* `test_solve_plane()` - РїСЂРѕРІРµСЂРёС‚ `solve_plane()`
 
-	* `newton_method.py` - тут должны быть ваши реализации метода Ньютона:
-		* `solve_scalar()` - для скалярного случая
-		* `solve_plane()` - для системы из двух уравнений
+	* `newton_method.py` - С‚СѓС‚ РґРѕР»Р¶РЅС‹ Р±С‹С‚СЊ РІР°С€Рё СЂРµР°Р»РёР·Р°С†РёРё РјРµС‚РѕРґР° РќСЊСЋС‚РѕРЅР°:
+		* `solve_scalar()` - РґР»СЏ СЃРєР°Р»СЏСЂРЅРѕРіРѕ СЃР»СѓС‡Р°СЏ
+		* `solve_plane()` - РґР»СЏ СЃРёСЃС‚РµРјС‹ РёР· РґРІСѓС… СѓСЂР°РІРЅРµРЅРёР№
