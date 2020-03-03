@@ -16,6 +16,9 @@ class ODE:
     def get_call_counter(self):
         return self.__call__.calls
 
+    def clear_call_counter(self):
+        self.__call__.__dict__['calls'] = 0
+
 
 class Harmonic(ODE):
     """
@@ -51,6 +54,7 @@ class HarmExp(ODE):
     def __init__(self):
         super(HarmExp, self).__init__([np.exp(1), 1])
 
+    @call_counter
     def __call__(self, t, y):
         return np.array([-y[0] * np.log(y[1]),
                          y[1] * np.log(y[0])])

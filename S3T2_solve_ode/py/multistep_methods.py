@@ -1,4 +1,5 @@
 import numpy as np
+from S3T2_solve_ode.py.one_step_methods import OneStepMethod
 
 
 #  coefficients for Adams methods
@@ -11,5 +12,5 @@ adams_coeffs = {
 }
 
 
-def adams(func, y_start, T, coeffs, one_step_method=None, **kwargs):
+def adams(func, y_start, T, coeffs, one_step_method: OneStepMethod):
     raise NotImplementedError
