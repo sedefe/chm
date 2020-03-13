@@ -12,7 +12,7 @@
     * `S2T3_approximation`
 1. Term 3:
     * `S3T1_integration`
-    * [_in progress_] `S3T2_solve_ode`
+    * `S3T2_solve_ode`
 
 Each task should be solved in Python>=3.6, look corresponding folders for code examples and test scripts.
 You should write the code that solves the problem and is verified by test script. Check readme.md files in subfolders for details (in Russian!).
