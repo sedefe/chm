@@ -9,7 +9,7 @@ from S3T1_integration.py.integration import (quad,
                                              composite_quad,
                                              integrate,
                                              aitken,
-                                             weight)
+                                             moments)
 
 
 def test_quad_degree():
@@ -47,7 +47,10 @@ def test_quad_degree():
 
 def test_weighted_quad_degree():
     """
-    check weighed quadrature degree
+    check weighted quadrature degree
+    we compare n-th moment of weight function calculated in two ways:
+        - by moments()
+        - numerically by quad()
     """
     x0, x1 = 1, 3
     alpha = 0.14
@@ -58,15 +61,15 @@ def test_weighted_quad_degree():
         p = Monome(deg)
         xs = np.linspace(x0, x1, 6)[1:-1]  # 4 points => accuracy degree is 3
 
-        res = quad(p, x0, x1, xs, alpha=alpha)
-        ans = weight(deg, x0, x1, alpha=alpha)
+        res = quad(p, x0, x1, xs, a=x0, alpha=alpha)
+        ans = moments(deg, x0, x1, a=x0, alpha=alpha)[-1]
         d = abs(res - ans)
         print(f'{deg:2}-a: {res:8.3f} vs {ans:8.3f}, delta = {d:e}')
         if deg < len(xs):
             assert d < 1e-6
 
-        res = quad(p, x0, x1, xs, beta=beta)
-        ans = weight(deg, x0, x1, beta=beta)
+        res = quad(p, x0, x1, xs, b=x1, beta=beta)
+        ans = moments(deg, x0, x1, b=x1, beta=beta)[-1]
         d = abs(res - ans)
         print(f'{deg:2}-b: {res:8.3f} vs {ans:8.3f}, delta = {d:e}')
         if deg < len(xs):
