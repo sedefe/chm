@@ -1,4 +1,6 @@
+import pytest
 import numpy as np
+from scipy.integrate import quad as sp_quad
 import matplotlib.pyplot as plt
 
 from utils.integrate_collection import Monome, Harmonic
@@ -15,6 +17,7 @@ from S3T1_integration.py.integration import (quad,
 def test_quad_degree():
     """
     check quadrature degree
+    Q: why in some cases x^n integrated perfectly with only n nodes?
     """
     x0, x1 = 0, 1
 
@@ -108,6 +111,10 @@ def test_quad_gauss_degree():
 
 
 def test_composite_quad():
+    """
+    test composite 3-node quad
+    Q: why convergence speed is ~4?
+    """
     plt.figure()
 
     x0, x1 = 0, 1
@@ -140,7 +147,54 @@ def test_composite_quad():
     plt.show()
 
 
+@pytest.mark.parametrize('v', [2, 3, 5, 6])
+def test_composite_quad_degree(v):
+    """
+    Q: convergence maybe somewhat between 3 and 4, why?
+    """
+    from .variants import params
+
+    plt.figure()
+    a, b, alpha, beta, f = params(v)
+    x0, x1 = a, b
+    # a, b = -10, 10
+    exact = sp_quad(lambda x: f(x) / (x-a)**alpha / (b-x)**beta, x0, x1)[0]
+
+    # plot weights
+    xs = np.linspace(x0, x1, 101)
+    ys = 1 / ((xs-a)**alpha * (b-xs)**beta)
+    plt.subplot(1, 2, 1)
+    plt.plot(xs, ys, label='weights')
+    ax = list(plt.axis())
+    ax[2] = 0.
+    plt.axis(ax)
+    plt.xlabel('x')
+    plt.ylabel('p(x)')
+    plt.legend()
+
+    L = 2
+    n_intervals = [L ** q for q in range(2, 10)]
+    n_nodes = 3
+    Y = [composite_quad(f, x0, x1, n_intervals=n, n_nodes=n_nodes,
+                        a=a, b=b, alpha=alpha, beta=beta) for n in n_intervals]
+    accuracy = get_log_error(Y, exact * np.ones_like(Y))
+    x = np.log10(n_intervals)
+    aitken_degree = aitken(*Y[5:8], L)
+
+    # plot acc
+    plt.subplot(1, 2, 2)
+    plt.plot(x, accuracy, 'kh')
+    plt.xlabel('log10(node count)')
+    plt.ylabel('accuracy')
+    plt.suptitle(f'variant #{v} (alpha={alpha:4.2f}, beta={beta:4.2f})\n'
+                 f'aitken estimation: {aitken_degree:.2f}')
+    plt.show()
+
+
 def test_integrate():
+    """
+    integrate with a given tolerance
+    """
     p = Harmonic(1, 0)
     x0, x1 = 0, np.pi
 
