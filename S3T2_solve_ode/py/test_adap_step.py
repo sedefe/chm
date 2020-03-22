@@ -64,6 +64,7 @@ def test_adaptive(f, y0):
 
     plt.figure('y(t)'), plt.legend()
     plt.figure('dt(t)'), plt.legend()
+    plt.figure('dy(t)'), plt.legend()
 
     plt.show()
 

@@ -54,6 +54,7 @@ def test_one_step():
 def test_multi_step():
     """
     test Adams method
+    Q: compare the right plot for both cases and explain the difference
     """
     y0 = np.array([0., 1.])
     t0 = 0
@@ -64,20 +65,24 @@ def test_multi_step():
     ts = np.arange(t0, t1+dt, dt)
     exact = f[ts].T
 
-    plt.figure()
-    plt.subplot(1, 2, 1), plt.plot(ts, [e[0] for e in exact], 'k', label='Exact')
-    for p, c in adams_coeffs.items():
-        t_adams, y_adams = adams(f, y0, ts, c,
-                                 one_step_method=RungeKuttaMethod(collection.rk4_coeffs))
-        print(f'Function calls: {f.get_call_counter()}')
+    for one_step_method in [
+        RungeKuttaMethod(collection.rk4_coeffs),
+        ExplicitEulerMethod(),
+    ]:
+        plt.figure()
+        plt.subplot(1, 2, 1), plt.plot(ts, [e[0] for e in exact], 'k', label='Exact')
+        for p, c in adams_coeffs.items():
+            t_adams, y_adams = adams(f, y0, ts, c,
+                                     one_step_method=one_step_method)
+            print(f'Function calls: {f.get_call_counter()}')
 
-        err = get_log_error(exact, y_adams)
+            err = get_log_error(exact, y_adams)
 
-        label = f"Adams's order {p}"
-        plt.subplot(1, 2, 1), plt.plot(t_adams, [y[0] for y in y_adams], '.--', label=label)
-        plt.subplot(1, 2, 2), plt.plot(t_adams, err, '.--', label=label)
+            label = f"Adams's order {p}"
+            plt.subplot(1, 2, 1), plt.plot(t_adams, [y[0] for y in y_adams], '.--', label=label)
+            plt.subplot(1, 2, 2), plt.plot(t_adams, err, '.--', label=label)
 
-    plt.subplot(1, 2, 1), plt.xlabel('t'), plt.ylabel('y'), plt.legend()
-    plt.subplot(1, 2, 2), plt.xlabel('t'), plt.ylabel('accuracy'), plt.legend()
-    plt.suptitle('test_multi_step')
+        plt.subplot(1, 2, 1), plt.xlabel('t'), plt.ylabel('y'), plt.legend()
+        plt.subplot(1, 2, 2), plt.xlabel('t'), plt.ylabel('accuracy'), plt.legend()
+        plt.suptitle(f'test_multi_step\none step method: {one_step_method.name}')
     plt.show()
