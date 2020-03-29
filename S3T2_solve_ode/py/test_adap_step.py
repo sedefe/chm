@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
-from utils.ode_collection import Harmonic, HarmExp
+from utils.ode_collection import Harmonic, HarmExp, Arenstorf
 from utils.utils import get_log_error
 from S3T2_solve_ode.py.solve_ode import adaptive_step_integration, AdaptType
 from S3T2_solve_ode.py.one_step_methods import (
@@ -110,4 +110,51 @@ def test_adaptive_order():
     plt.xlabel('log10(function_calls)')
     plt.ylabel('accuracy')
     plt.legend()
+    plt.show()
+
+
+def test_arenstorf():
+    """
+    https://en.wikipedia.org/wiki/Richard_Arenstorf#The_Arenstorf_Orbit
+    https://commons.wikimedia.org/wiki/File:Arenstorf_Orbit.gif
+    Q: which parts of the orbit are fastest?
+    """
+    problem = Arenstorf()
+    t0, t1 = 0, 1 * problem.t_period
+    y0 = problem.y0
+
+    atol = 1e-6
+    rtol = 1e-3
+
+    tss = []
+    yss = []
+
+    methods = (
+        # (ExplicitEulerMethod(),                                     AdaptType.RUNGE),
+        (RungeKuttaMethod(coeffs=collection.rk4_coeffs),            AdaptType.RUNGE),
+        (EmbeddedRungeKuttaMethod(coeffs=collection.dopri_coeffs),  AdaptType.EMBEDDED),
+    )
+
+    plt.figure('traj'), plt.suptitle('Arenstorf orbit: trajectory'), plt.xlabel('x1'), plt.ylabel('x2')
+    plt.figure('dt(t)'), plt.suptitle('Arenstorf orbit: step sizes'), plt.xlabel('t'), plt.ylabel('dt')
+
+    for method, adapt_type in methods:
+        ts, ys = adaptive_step_integration(method=method,
+                                           func=problem, y_start=y0, t_span=(t0, t1),
+                                           adapt_type=adapt_type,
+                                           atol=atol, rtol=rtol)
+        tss.append(np.array(ts))
+        yss.append(ys)
+
+    for (m, _), ts, ys in zip(methods, tss, yss):
+        plt.figure('traj'), plt.plot([y[0] for y in ys],
+                                     [y[1] for y in ys],
+                                     ':', label=m.name)
+        plt.figure('dt(t)'), plt.plot(ts[:-1], ts[1:] - ts[:-1], '.-', label=m.name)
+
+    plt.figure('traj')
+    plt.plot(0, 0, 'bo', label='Earth')
+    plt.plot(1, 0, '.', color='grey', label='Moon')
+    plt.legend()
+    plt.figure('dt(t)'), plt.legend()
     plt.show()

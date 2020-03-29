@@ -102,3 +102,35 @@ class VanDerPol(ODE):
             [0.,                            1.],
             [-2*self.mu*y[0] * y[1] - 1.,   self.mu*(1 - y[0]**2)],
         ])
+
+
+class Arenstorf(ODE):
+    """
+    Arenstorf orbit
+    a stable periodic orbit between Earth (0,0) and Moon (1,0)
+    x_1'' = x_1 + 2*x_2' - mu1*(x_1 + mu)/D_1 - mu*(x_1 - mu1)/D_2
+    x_2'' = x_2 - 2*x_1' - mu1*(x_2)/D_1 - mu*(x_2)/D_2
+    """
+    def __init__(self):
+        super().__init__([
+            0.994,
+            0.,
+            0.,
+            -2.00158510637908252240537862224
+        ])
+        self.t_period = 17.0652165601579625588917206249
+
+    @call_counter
+    def __call__(self, t, y):
+        mu = 0.012277471
+        mu1 = 1 - mu
+        D_1 = ((y[0] + mu)**2  + y[1]**2) ** 1.5
+        D_2 = ((y[0] - mu1)**2 + y[1]**2) ** 1.5
+
+        return np.array([
+            y[2],
+            y[3],
+            y[0] + 2*y[3] - mu1*(y[0] + mu)/D_1 - mu*(y[0]-mu1)/D_2,
+            y[1] - 2*y[2] - mu1*y[1]/D_1 - mu*y[1]/D_2,
+        ])
+
