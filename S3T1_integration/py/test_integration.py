@@ -203,6 +203,6 @@ def test_integrate():
 
         print(f'Check for tol {tol:.2e}: res = {s-err:.6f} .. {s:.6f} .. {s+err:.6f}')
 
-        assert err >= 0, 'estimated error should be >= 0'
-        assert np.abs(p[x0, x1] - s) <= err, 'actual error should be <= estimated error'
-        assert np.abs(p[x0, x1] - s) <= tol, 'actual error should be <= tolerance'
+        assert err >= 0,                            'estimated error should be >= 0'
+        assert np.abs(p[x0, x1] - s) <= 1.1*err,    'actual error should be <= estimated error + 10%'
+        assert np.abs(p[x0, x1] - s) <= tol,        'actual error should be <= tolerance'
