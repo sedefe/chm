@@ -11,6 +11,7 @@ def solve_scalar(f: sp.Expr, x0, tol):
     return list of x, list of y
     """
     raise NotImplementedError
+    return xs, ys
 
 
 def solve_plane(f: sp.Matrix, x0, y0, tol):
@@ -20,3 +21,4 @@ def solve_plane(f: sp.Matrix, x0, y0, tol):
     return list of x, list of y, list of np.linalg.norm(z)
     """
     raise NotImplementedError
+    return xs, ys, zs

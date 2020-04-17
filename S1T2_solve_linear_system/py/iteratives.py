@@ -43,6 +43,7 @@ def jacobi(A, b, tol):
     returns: list of x, list of y
     """
     raise NotImplementedError
+    return xs, ys
 
 
 def seidel(A, b, tol):
@@ -51,3 +52,4 @@ def seidel(A, b, tol):
     returns: list of x, list of y
     """
     raise NotImplementedError
+    return xs, ys
