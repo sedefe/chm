@@ -26,9 +26,8 @@ def test_one_step():
     ts = np.arange(t0, t1+dt, dt)
 
     exact = f[ts].T
-    plt.figure()
-    plt.subplot(1, 2, 1)
-    plt.plot(ts, [e[0] for e in exact], 'k', label='Exact')
+    _, (ax1, ax2) = plt.subplots(1, 2)
+    ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
 
     colors = 'rgbcmyk'
     for i, method in enumerate(
@@ -38,15 +37,16 @@ def test_one_step():
                 RungeKuttaMethod(collection.dopri_coeffs),
             ]
     ):
+        f.clear_call_counter()
         _, y = fix_step_integration(method, f, y0, ts)
-        print(f'len(Y): {len(y)}')
-        print(f'Function calls: {f.get_call_counter()}')
+        n_calls = f.get_call_counter()
+        print(f'One-step {method.name}: {len(y)-1} steps, {n_calls} function calls')
 
-        plt.subplot(1, 2, 1), plt.plot(ts, [_y[0] for _y in y], f'{colors[i]}.--', label=method.name)
-        plt.subplot(1, 2, 2), plt.plot(ts, get_log_error(exact, y), f'{colors[i]}.--', label=method.name)
+        ax1.plot(ts, [_y[0] for _y in y], f'{colors[i]}.--', label=method.name)
+        ax2.plot(ts, get_log_error(exact, y), f'{colors[i]}.--', label=method.name)
 
-    plt.subplot(1, 2, 1), plt.xlabel('t'), plt.ylabel('y'), plt.legend()
-    plt.subplot(1, 2, 2), plt.xlabel('t'), plt.ylabel('accuracy'), plt.legend()
+    ax1.set_xlabel('t'), ax1.set_ylabel('y'), ax1.legend()
+    ax2.set_xlabel('t'), ax2.set_ylabel('accuracy'), ax2.legend()
     plt.suptitle('test_one_step')
     plt.show()
 
@@ -69,20 +69,23 @@ def test_multi_step():
         RungeKuttaMethod(collection.rk4_coeffs),
         ExplicitEulerMethod(),
     ]:
-        plt.figure()
-        plt.subplot(1, 2, 1), plt.plot(ts, [e[0] for e in exact], 'k', label='Exact')
+        _, (ax1, ax2) = plt.subplots(1, 2)
+
+        ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
         for p, c in adams_coeffs.items():
+            f.clear_call_counter()
             t_adams, y_adams = adams(f, y0, ts, c,
                                      one_step_method=one_step_method)
-            print(f'Function calls: {f.get_call_counter()}')
+            n_calls = f.get_call_counter()
+            print(f'{p}-order multi-step with one-step {one_step_method.name}: {n_calls} function calls')
 
             err = get_log_error(exact, y_adams)
 
             label = f"Adams's order {p}"
-            plt.subplot(1, 2, 1), plt.plot(t_adams, [y[0] for y in y_adams], '.--', label=label)
-            plt.subplot(1, 2, 2), plt.plot(t_adams, err, '.--', label=label)
+            ax1.plot(t_adams, [y[0] for y in y_adams], '.--', label=label)
+            ax2.plot(t_adams, err, '.--', label=label)
 
-        plt.subplot(1, 2, 1), plt.xlabel('t'), plt.ylabel('y'), plt.legend()
-        plt.subplot(1, 2, 2), plt.xlabel('t'), plt.ylabel('accuracy'), plt.legend()
+        ax1.set_xlabel('t'), ax1.set_ylabel('y'), ax1.legend()
+        ax2.set_xlabel('t'), ax2.set_ylabel('accuracy'), ax2.legend()
         plt.suptitle(f'test_multi_step\none step method: {one_step_method.name}')
     plt.show()

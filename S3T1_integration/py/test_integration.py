@@ -116,7 +116,7 @@ def test_composite_quad(n_nodes):
     test composite 2-, 3-, 5-node quads
     Q: explain converge speed for each case
     """
-    plt.figure()
+    fig, ax = plt.subplots(1, 2)
 
     x0, x1 = 0, 1
     L = 2
@@ -133,14 +133,13 @@ def test_composite_quad(n_nodes):
         k, b = np.polyfit(x[ind], accuracy[ind], 1)
         aitken_degree = aitken(*Y[0:6:2], L ** 2)
 
-        plt.subplot(1, 2, i+1)
-        plt.title(f'{n_nodes}-node CQ for x^{degree}')
-        plt.plot(x, k*x+b, 'b:', label=f'{k:.2f}*x+{b:.2f}')
-        plt.plot(x, aitken_degree*x+b, 'm:', label=f'aitken ({aitken_degree:.2f})')
-        plt.plot(x, accuracy, 'kh', label=f'accuracy for x^{degree}')
-        plt.xlabel('log10(node count)')
-        plt.ylabel('accuracy')
-        plt.legend()
+        ax[i].plot(x, k*x+b, 'b:', label=f'{k:.2f}*x+{b:.2f}')
+        ax[i].plot(x, aitken_degree*x+b, 'm:', label=f'aitken ({aitken_degree:.2f})')
+        ax[i].plot(x, accuracy, 'kh', label=f'accuracy for x^{degree}')
+        ax[i].set_title(f'{n_nodes}-node CQ for x^{degree}')
+        ax[i].set_xlabel('log10(node count)')
+        ax[i].set_ylabel('accuracy')
+        ax[i].legend()
 
         if n_nodes < degree:
             assert np.abs(aitken_degree - k) < 0.5, \
@@ -155,8 +154,8 @@ def test_composite_quad_degree(v):
     Q: convergence maybe somewhat between 3 and 4, why?
     """
     from .variants import params
+    fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    plt.figure()
     a, b, alpha, beta, f = params(v)
     x0, x1 = a, b
     # a, b = -10, 10
@@ -165,14 +164,14 @@ def test_composite_quad_degree(v):
     # plot weights
     xs = np.linspace(x0, x1, 101)
     ys = 1 / ((xs-a)**alpha * (b-xs)**beta)
-    plt.subplot(1, 2, 1)
-    plt.plot(xs, ys, label='weights')
-    ax = list(plt.axis())
+
+    ax1.plot(xs, ys, label='weights')
+    ax = list(ax1.axis())
     ax[2] = 0.
-    plt.axis(ax)
-    plt.xlabel('x')
-    plt.ylabel('p(x)')
-    plt.legend()
+    ax1.axis(ax)
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('p(x)')
+    ax1.legend()
 
     L = 2
     n_intervals = [L ** q for q in range(2, 10)]
@@ -184,11 +183,10 @@ def test_composite_quad_degree(v):
     aitken_degree = aitken(*Y[5:8], L)
 
     # plot acc
-    plt.subplot(1, 2, 2)
-    plt.plot(x, accuracy, 'kh')
-    plt.xlabel('log10(node count)')
-    plt.ylabel('accuracy')
-    plt.suptitle(f'variant #{v} (alpha={alpha:4.2f}, beta={beta:4.2f})\n'
+    ax2.plot(x, accuracy, 'kh')
+    ax2.set_xlabel('log10(node count)')
+    ax2.set_ylabel('accuracy')
+    fig.suptitle(f'variant #{v} (alpha={alpha:4.2f}, beta={beta:4.2f})\n'
                  f'aitken estimation: {aitken_degree:.2f}')
     plt.show()
 

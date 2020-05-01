@@ -60,14 +60,13 @@ def test_float_log2():
     Y_log = np.log2(X)
     Y_int = [tc.bin2dec(tc.float2bin(x), signed=False) for x in X]
 
-    plt.subplot(1, 2, 1)
-    plt.plot(X, Y_log, 'r.-', label='log2(x)')
-    plt.plot(X, Y_int, 'b.-', label='uint(x)')
-    plt.legend()
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    ax1.plot(X, Y_log, 'r.-', label='log2(x)')
+    ax1.plot(X, Y_int, 'b.-', label='uint(x)')
+    ax1.legend()
 
-    plt.subplot(1, 2, 2)
-    plt.plot(Y_int,  Y_log, 'k.-', label=f'log2(x) vs uint(x)')
-    plt.legend()
+    ax2.plot(Y_int,  Y_log, 'k.-', label=f'log2(x) vs uint(x)')
+    ax2.legend()
 
     plt.show()
 
@@ -93,15 +92,14 @@ def test_fast_inv_sqrt():
         for i in range(3)]
     colors = 'rgb'
 
-    plt.subplot(1, 2, 1)
-    plt.plot(X, Y0, 'k-', label='exact')
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    ax1.plot(X, Y0, 'k-', label='exact')
     for i in range(3):
-        plt.plot(X, Y[i], f'{colors[i]}.:', label=f'{i}-iterations approximation')
-    plt.legend()
+        ax1.plot(X, Y[i], f'{colors[i]}.:', label=f'{i}-iterations approximation')
+    ax1.legend()
 
-    plt.subplot(1, 2, 2)
     for i in range(3):
-        plt.plot(X, -np.log10(np.abs(Y0 - Y[i])), f'{colors[i]}.:', label=f'{i}-iterations accuracy')
-    plt.legend()
+        ax2.plot(X, -np.log10(np.abs(Y0 - Y[i])), f'{colors[i]}.:', label=f'{i}-iterations accuracy')
+    ax2.legend()
 
     plt.show()

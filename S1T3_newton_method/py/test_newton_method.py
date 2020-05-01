@@ -18,15 +18,14 @@ from S1T3_newton_method.py.newton_method import solve_scalar, solve_plane
 def test_solve_scalar(f, x0):
     interval = -10, 10
 
-    plt.figure()
-    plt.suptitle(f)
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle(f)
 
     # plot reference line
     xs_ref = np.linspace(*interval, 1001)
     ys_ref = [f.subs(x, xx) for xx in xs_ref]
-    plt.subplot(1, 2, 1)
-    plt.plot(xs_ref, ys_ref, 'c-')
-    plt.plot(interval, [0, 0], 'k-')
+    ax1.plot(xs_ref, ys_ref, 'c-')
+    ax1.plot(interval, [0, 0], 'k-')
 
     # get iterations
     tol = 1e-9
@@ -34,20 +33,18 @@ def test_solve_scalar(f, x0):
     assert abs(f.subs(x, xs[-1])) < tol
 
     # plot iterations
-    plt.subplot(1, 2, 1)
     for i in range(len(xs)-1):
-        plt.plot([xs[i],   xs[i+1]], [ys[i],   0], 'r:')
-        plt.plot([xs[i+1], xs[i+1]], [0, ys[i+1]], 'g:')
-    plt.plot(xs, ys, 'b*')
+        ax1.plot([xs[i],   xs[i+1]], [ys[i],   0], 'r:')
+        ax1.plot([xs[i+1], xs[i+1]], [0, ys[i+1]], 'g:')
+    ax1.plot(xs, ys, 'b*')
 
-    plt.xlabel('x')
-    plt.ylabel('y')
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('y')
 
     # plot accuracy
-    plt.subplot(1, 2, 2)
-    plt.plot(-np.log10(np.abs(ys)), 'b.:')
-    plt.xlabel('N step')
-    plt.ylabel('Accuracy')
+    ax2.plot(-np.log10(np.abs(ys)), 'b.:')
+    ax2.set_xlabel('N step')
+    ax2.set_ylabel('Accuracy')
     plt.show()
 
 
@@ -62,9 +59,7 @@ def test_solve_plane(f, x0, y0):
     tol = 1e-9
     xs, ys, zs = solve_plane(f, x0, y0, tol)
     f_eval = f.subs({x: xs[-1], y: ys[-1]})
-    assert np.linalg.norm([float(f_eval[0]),
-                           float(f_eval[1])]
-                          ) < tol
+    assert np.linalg.norm([float(f_eval[0]), float(f_eval[1])]) < tol
 
     # plot f() lines
     p = sp.plot(show=False, backend=sp.plotting.plot_backends['matplotlib'])
