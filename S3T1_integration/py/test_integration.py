@@ -180,12 +180,15 @@ def test_composite_quad_degree(v):
                         a=a, b=b, alpha=alpha, beta=beta) for n in n_intervals]
     accuracy = get_log_error(Y, exact * np.ones_like(Y))
     x = np.log10(n_intervals)
+    k, b = np.polyfit(x, accuracy, 1)
     aitken_degree = aitken(*Y[5:8], L)
 
     # plot acc
     ax2.plot(x, accuracy, 'kh')
+    ax2.plot(x, k*x+b, 'b:', label=f'{k:.2f}*x+{b:.2f}')
     ax2.set_xlabel('log10(node count)')
     ax2.set_ylabel('accuracy')
+    ax2.legend()
     fig.suptitle(f'variant #{v} (alpha={alpha:4.2f}, beta={beta:4.2f})\n'
                  f'aitken estimation: {aitken_degree:.2f}')
     plt.show()

@@ -72,7 +72,7 @@ class EmbeddedRungeKuttaMethod(RungeKuttaMethod):
 
     def embedded_step(self, func: ODE, t, y, dt):
         A, b, e = self.A, self.b, self.e
-        c = np.sum(A, axis=0)
+        c = np.sum(A, axis=1)
         raise NotImplementedError
         return y1, dy
 
@@ -90,6 +90,6 @@ class EmbeddedRosenbrockMethod(OneStepMethod):
 
     def embedded_step(self, func: ODE, t, y, dt):
         A, G, g, b, e = self.A, self.G, self.gamma, self.b, self.e
-        c = np.sum(A, axis=0)
+        c = np.sum(A, axis=1)
         raise NotImplementedError
         return y1, dy
