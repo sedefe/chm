@@ -42,8 +42,12 @@ def test_one_step():
         n_calls = f.get_call_counter()
         print(f'One-step {method.name}: {len(y)-1} steps, {n_calls} function calls')
 
-        ax1.plot(ts, [_y[0] for _y in y], f'{colors[i]}.--', label=method.name)
-        ax2.plot(ts, get_log_error(exact, y), f'{colors[i]}.--', label=method.name)
+        ax1.plot(ts,
+                 [_y[0] for _y in y],
+                 f'{colors[i]}.--', label=method.name)
+        ax2.plot(ts,
+                 get_log_error(exact, y),
+                 f'{colors[i]}.--', label=method.name)
 
     ax1.set_xlabel('t'), ax1.set_ylabel('y'), ax1.legend()
     ax2.set_xlabel('t'), ax2.set_ylabel('accuracy'), ax2.legend()

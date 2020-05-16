@@ -124,7 +124,7 @@ class Arenstorf(ODE):
     def __call__(self, t, y):
         mu = 0.012277471
         mu1 = 1 - mu
-        D_1 = ((y[0] + mu)**2  + y[1]**2) ** 1.5
+        D_1 = ((y[0] + mu)**2 + y[1]**2) ** 1.5
         D_2 = ((y[0] - mu1)**2 + y[1]**2) ** 1.5
 
         return np.array([
@@ -133,4 +133,3 @@ class Arenstorf(ODE):
             y[0] + 2*y[3] - mu1*(y[0] + mu)/D_1 - mu*(y[0]-mu1)/D_2,
             y[1] - 2*y[2] - mu1*y[1]/D_1 - mu*y[1]/D_2,
         ])
-

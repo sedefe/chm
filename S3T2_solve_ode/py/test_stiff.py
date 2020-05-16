@@ -9,7 +9,7 @@ from S3T2_solve_ode.py.one_step_methods import (
     ImplicitEulerMethod,
     EmbeddedRosenbrockMethod,
 )
-import S3T2_solve_ode.py.coeffs_collection as collection
+import S3T2_solve_ode.py.coeffs_collection as coeffs
 
 
 def test_stiff():
@@ -30,21 +30,31 @@ def test_stiff():
     colors = 'rgbcmyk'
     for i, (method, adapt_type) in enumerate(
             [
-                (ExplicitEulerMethod(),                                    AdaptType.RUNGE),
-                (ImplicitEulerMethod(),                                    AdaptType.RUNGE),
-                (EmbeddedRosenbrockMethod(collection.rosenbrock23_coeffs), AdaptType.EMBEDDED),
+                (ExplicitEulerMethod(),                                AdaptType.RUNGE),
+                (ImplicitEulerMethod(),                                AdaptType.RUNGE),
+                (EmbeddedRosenbrockMethod(coeffs.rosenbrock23_coeffs), AdaptType.EMBEDDED),
             ]
     ):
         f.clear_call_counter()
-        ts, ys = adaptive_step_integration(method, f, y0, (t0, t1), adapt_type=adapt_type, atol=1e-6, rtol=1e-3)
+        ts, ys = adaptive_step_integration(method, f, y0, (t0, t1),
+                                           adapt_type=adapt_type,
+                                           atol=1e-6, rtol=1e-3)
         print(f'{method.name}: {len(ts)-1} steps, {f.get_call_counter()} RHS calls')
 
-        ax1.plot([y[0] for y in ys], [y[1] for y in ys], f'{colors[i]}.--', label=method.name)
+        ax1.plot([y[0] for y in ys],
+                 [y[1] for y in ys],
+                 f'{colors[i]}.--', label=method.name)
 
-        ax21.plot(ts, [y[0] for y in ys], f'{colors[i]}.--', label=method.name)
-        ax22.plot(ts, [y[1] for y in ys], f'{colors[i]}.--', label=method.name)
+        ax21.plot(ts,
+                  [y[0] for y in ys],
+                  f'{colors[i]}.--', label=method.name)
+        ax22.plot(ts,
+                  [y[1] for y in ys],
+                  f'{colors[i]}.--', label=method.name)
 
-        ax3.plot(ts[:-1], np.array(ts[1:]) - np.array(ts[:-1]), f'{colors[i]}.--', label=method.name)
+        ax3.plot(ts[:-1],
+                 np.array(ts[1:]) - np.array(ts[:-1]),
+                 f'{colors[i]}.--', label=method.name)
 
     ax1.set_xlabel('x'), ax1.set_ylabel('y'), ax1.legend()
     fig1.suptitle(f'test_stiff: Van der Pol, mu={mu:.2f}, y(x)')

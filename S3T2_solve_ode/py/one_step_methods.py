@@ -65,7 +65,9 @@ class EmbeddedRungeKuttaMethod(RungeKuttaMethod):
     Embedded Runge-Kutta method with (A, b, e) coefficients:
     y1 = RK(func, A, b)
     y2 = RK(func, A, d), where d = b+e
-    embedded_step() method should return approximation (y1) AND approximations difference (dy = y2-y1)
+    embedded_step() method should return:
+        - approximation (y1)
+        - approximations difference (dy = y2-y1)
     """
     def __init__(self, coeffs: collection.EmbeddedRKScheme):
         super().__init__(coeffs=coeffs)
@@ -82,7 +84,9 @@ class EmbeddedRosenbrockMethod(OneStepMethod):
     Embedded Rosenbrock method with (A, G, gamma, b, e) coefficients:
     y1 = Rosenbrock(func, A, G, gamma, b)
     y2 = Rosenbrock(func, A, G, gamma, d), where d = b+e
-    embedded_step() method should return approximation (y1) AND approximations difference (dy = y2-y1)
+    embedded_step() method should return:
+        - approximation (y1)
+        - approximations difference (dy = y2-y1)
     See eq.2 in https://dl.acm.org/doi/10.1145/355993.355994 for details
     """
     def __init__(self, coeffs: collection.EmbeddedRosenbrockScheme):
