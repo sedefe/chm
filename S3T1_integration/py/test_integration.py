@@ -181,6 +181,7 @@ def test_composite_quad_degree(v):
     accuracy = get_log_error(Y, exact * np.ones_like(Y))
     x = np.log10(n_intervals)
     k, b = np.polyfit(x, accuracy, 1)
+    assert k > 1, 'composite quad did not converge!'
     aitken_degree = aitken(*Y[5:8], L)
 
     # plot acc
