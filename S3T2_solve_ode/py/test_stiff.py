@@ -15,6 +15,7 @@ import S3T2_solve_ode.py.coeffs_collection as coeffs
 def test_stiff():
     """
     test explicit vs implicit methods on a stiff problem
+    https://en.wikipedia.org/wiki/Van_der_Pol_oscillator
     """
     t0 = 0
     t1 = 800*np.pi

@@ -32,7 +32,7 @@ def test_quad_degree():
         Y = [quad(p, x0, x1, np.linspace(x0, x1, node_count)) for node_count in max_node_count]
         # Y = [quad(p, x0, x1, x0 + (x1-x0) * np.random.random(node_count)) for node_count in max_node_count]
         accuracy = get_log_error(Y, y0 * np.ones_like(Y))
-        accuracy[np.isinf(accuracy)] = 17
+        accuracy[accuracy > 17] = 17
 
         # check accuracy is good enough
         for node_count, acc in zip(max_node_count, accuracy):
