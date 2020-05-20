@@ -195,6 +195,41 @@ def test_composite_quad_degree(v):
     plt.show()
 
 
+def test_gauss_vs_cq():
+    """
+    check quad_gauss() versus composite_quad() on the same number of function evaluations
+    """
+    x0, x1 = 0, np.pi/2
+
+    p = Harmonic(0, 1)
+    y0 = p[x0, x1]
+
+    n_nodes = 2
+    Y_gauss = []
+    Y_cquad = []
+
+    n_intervals = np.arange(1, 256, 5)
+    for n in n_intervals:
+        n_evals = n * n_nodes
+        Y_gauss.append(quad_gauss(p, x0, x1, n_evals))
+        Y_cquad.append(composite_quad(p, x0, x1, n, n_nodes))
+
+    accuracy_gauss = get_log_error(Y_gauss, y0 * np.ones_like(Y_gauss))
+    accuracy_gauss[accuracy_gauss > 17] = 17
+
+    accuracy_cquad = get_log_error(Y_cquad, y0 * np.ones_like(Y_cquad))
+    accuracy_cquad[accuracy_cquad > 17] = 17
+
+    plt.plot(np.log10(n_intervals), accuracy_gauss, '.:', label=f'gauss')
+    plt.plot(np.log10(n_intervals), accuracy_cquad, '.:', label=f'2-node CQ')
+
+    plt.legend()
+    plt.ylabel('accuracy')
+    plt.xlabel('log10(n_evals)')
+    plt.suptitle(f'test gauss vs CQ')
+    plt.show()
+
+
 def test_integrate():
     """
     integrate with a given tolerance
