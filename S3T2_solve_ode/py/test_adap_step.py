@@ -87,11 +87,12 @@ def test_adaptive_order():
     methods = (
         (ExplicitEulerMethod(),                         AdaptType.RUNGE),
         (RungeKuttaMethod(coeffs.rk4_coeffs),           AdaptType.RUNGE),
+        (RungeKuttaMethod(coeffs.dopri_coeffs),         AdaptType.RUNGE),
         (EmbeddedRungeKuttaMethod(coeffs.dopri_coeffs), AdaptType.EMBEDDED),
     )
     tols = 10. ** -np.arange(3, 9)
 
-    plt.figure()
+    plt.figure(figsize=(9, 6))
     for i, (method, adapt_type) in enumerate(methods):
         print(method.name)
         fcs = []
@@ -114,7 +115,7 @@ def test_adaptive_order():
         y = -np.log10(errs)
         k, b = np.polyfit(x, y, 1)
         plt.plot(x, k*x+b, 'k:')
-        plt.plot(x, y, 'p', label=f'{method.name} ({k:.2f})')
+        plt.plot(x, y, 'p', label=f'{method.name} {adapt_type} ({k:.2f})')
     plt.suptitle('test_adaptive_order: check RHS evals')
     plt.xlabel('log10(function_calls)')
     plt.ylabel('accuracy')
