@@ -100,7 +100,6 @@ def test_condition():
     check condition numbers
     Q: how condition number affect solving linear system?
     """
-    # with np.printoptions(precision=3, suppress=True):
     with np.printoptions(precision=3, suppress=True):
         rnd = np.random.RandomState(88)
         A = rnd.rand(5, 5)

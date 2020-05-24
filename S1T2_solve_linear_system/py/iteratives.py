@@ -15,7 +15,7 @@ def transform(A, b):
     return C, d
 
 
-def richardson(A, b, tol):
+def richardson(A, b, tol, max_iter=100):
     """
     Richardson method, tau_k = ||A||
     returns: list of x, list of y
@@ -26,18 +26,20 @@ def richardson(A, b, tol):
     ys = []
     x = b / tau
 
-    while True:
+    while len(xs) < max_iter:
         xs.append(x)
         err = la.norm(A @ x - b)
         ys.append(err)
+
         if err <= tol:
             break
+
         x = x - (A @ x - b)/tau
 
     return xs, ys
 
 
-def jacobi(A, b, tol):
+def jacobi(A, b, tol, max_iter=100):
     """
     Jacobi method
     returns: list of x, list of y
@@ -46,7 +48,7 @@ def jacobi(A, b, tol):
     return xs, ys
 
 
-def seidel(A, b, tol):
+def seidel(A, b, tol, max_iter=100):
     """
     Gauss-Seidel method
     returns: list of x, list of y
