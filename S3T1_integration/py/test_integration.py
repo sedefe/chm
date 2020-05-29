@@ -14,6 +14,37 @@ from S3T1_integration.py.integration import (quad,
                                              moments)
 
 
+@pytest.mark.parametrize('func', [
+    np.sin,
+    np.cos,
+    np.exp,
+    np.sqrt
+])
+def test_interpolation(func):
+    """
+    check they are interpolating
+    interpolate + integrate via numpy, then compare with quad()
+    """
+    x0, x1 = 0, 1
+    n_nodes = 5
+
+    xs = np.linspace(x0, x1, n_nodes)
+    ys = func(xs)
+
+    # numpy
+    poly = np.polyfit(xs, ys, deg=n_nodes-1)
+    polyint = np.polyint(poly)
+    int_v = np.polyval(polyint, x1) - np.polyval(polyint, x0)
+
+    # our
+    num_v = quad(func, x0, x1, xs)
+
+    delta = np.abs(int_v - num_v)
+    assert delta < 1e-6
+
+    print(f'interpolate+integrate: {int_v:8.3f}, quad: {num_v:8.3f}, delta: {delta:e}')
+
+
 def test_quad_degree():
     """
     check quadrature degree
