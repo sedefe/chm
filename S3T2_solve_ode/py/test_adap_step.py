@@ -19,7 +19,7 @@ import S3T2_solve_ode.py.coeffs_collection as coeffs
 ))
 def test_adaptive(f, y0):
     """
-    test adaptive step algorithms
+    Проверяем алгоритмы выбора шага
     """
     t0, t1 = 0, 4*np.pi
 
@@ -78,7 +78,8 @@ def test_adaptive(f, y0):
 
 def test_adaptive_order():
     """
-    test adaptive algorithms convergence
+    Проверяем сходимость
+    Q: почему наклон линии (число в скобках) соответствует порядку метода?
     """
     t0, t1 = 0, 2*np.pi
     y0 = np.array([1., 1.])
@@ -127,7 +128,7 @@ def test_arenstorf():
     """
     https://en.wikipedia.org/wiki/Richard_Arenstorf#The_Arenstorf_Orbit
     https://commons.wikimedia.org/wiki/File:Arenstorf_Orbit.gif
-    Q: which parts of the orbit are fastest?
+    Q: какие участки траектории наиболее быстрые?
     """
     problem = Arenstorf()
     t0, t1 = 0, 1 * problem.t_period

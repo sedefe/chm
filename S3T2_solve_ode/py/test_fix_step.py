@@ -16,7 +16,7 @@ from S3T2_solve_ode.py.multistep_methods import adams, adams_coeffs
 
 def test_one_step():
     """
-    test Euler and RK methods
+    Проверяем методы Эйлера и Рунге-Кутты
     """
     y0 = np.array([0., 1.])
     t0 = 0
@@ -59,8 +59,8 @@ def test_one_step():
 
 def test_multi_step():
     """
-    test Adams method
-    Q: compare the right plot for both cases and explain the difference
+    Проверяем методы Адамса
+    Q: сравните правые графики для обоих случаев и объясните разницу
     """
     y0 = np.array([0., 1.])
     t0 = 0

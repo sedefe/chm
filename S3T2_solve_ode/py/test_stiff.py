@@ -14,8 +14,9 @@ import S3T2_solve_ode.py.coeffs_collection as coeffs
 
 def test_stiff():
     """
-    test explicit vs implicit methods on a stiff problem
+    Проверяем явные и неявные методы на жёсткой задаче
     https://en.wikipedia.org/wiki/Van_der_Pol_oscillator
+    Q: почему даже метод Розенброка иногда уменьшает шаг почти до нуля?
     """
     t0 = 0
     t1 = 800*np.pi

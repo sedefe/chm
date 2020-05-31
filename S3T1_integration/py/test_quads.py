@@ -18,8 +18,8 @@ from S3T1_integration.py.integration import (quad,
 ])
 def test_interpolation(func):
     """
-    check they are interpolating
-    interpolate + integrate via numpy, then compare with quad()
+    Проверяем, что значит буква "И" в названии ИКФ
+    Интегрируем интерполяционный многочлен, затем сравниваем результат с quad()
     """
     x0, x1 = 0, 1
     n_nodes = 5
@@ -43,8 +43,8 @@ def test_interpolation(func):
 
 def test_quad_degree():
     """
-    check quadrature degree
-    Q: why in some cases x^n integrated perfectly with only n nodes?
+    Проверяем АСТ для ИКФ
+    Q: почему в  некоторых случаях x^n интегрируется почти без ошибок при n узлах ИКФ?
     """
     x0, x1 = 0, 1
 
@@ -61,7 +61,7 @@ def test_quad_degree():
         accuracy = get_log_error(Y, y0 * np.ones_like(Y))
         accuracy[accuracy > 17] = 17
 
-        # check accuracy is good enough
+        # Проверяем точность
         for node_count, acc in zip(max_node_count, accuracy):
             if node_count >= deg + 1:
                 assert acc > 6
@@ -77,10 +77,10 @@ def test_quad_degree():
 
 def test_weighted_quad_degree():
     """
-    check weighted quadrature degree
-    we compare n-th moment of weight function calculated in two ways:
-        - by moments()
-        - numerically by quad()
+    Проверяем АСТ для ИКФ с весами
+    Посчитаем n-ый момент весовой функции двумя способами:
+        - через moments()
+        - численно через quad()
     """
     x0, x1 = 1, 3
     alpha = 0.14
@@ -108,7 +108,7 @@ def test_weighted_quad_degree():
 
 def test_quad_gauss_degree():
     """
-    check gaussian quadrature degree
+    Проверяем АСТ для ИКФ Гаусса
     """
     x0, x1 = 0, 1
 

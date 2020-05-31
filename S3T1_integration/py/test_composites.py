@@ -15,8 +15,8 @@ from S3T1_integration.py.integration import (quad_gauss,
 @pytest.mark.parametrize('n_nodes', [2, 3, 5])
 def test_composite_quad(n_nodes):
     """
-    test composite 2-, 3-, 5-node quads
-    Q: explain convergence speed for each case
+    Проверяем 2-, 3-, 5-узловые СКФ
+    Q: объясните скорость сходимости для каждого случая
     """
     fig, ax = plt.subplots(1, 2)
 
@@ -30,7 +30,7 @@ def test_composite_quad(n_nodes):
         accuracy = get_log_error(Y, p[x0, x1] * np.ones_like(Y))
         x = np.log10(n_intervals)
 
-        # check convergence
+        # Оценка сходимости
         ind = np.isfinite(x) & np.isfinite(accuracy)
         k, b = np.polyfit(x[ind], accuracy[ind], 1)
         aitken_degree = aitken(*Y[0:6:2], L ** 2)
@@ -53,18 +53,33 @@ def test_composite_quad(n_nodes):
 @pytest.mark.parametrize('v', [2, 3, 5, 6])
 def test_composite_quad_degree(v):
     """
-    Q: convergence maybe somewhat between 3 and 4, why?
+    Проверяем сходимость СКФ при наличии неравных весов
+    Q: скорость сходимости оказывается дробной, почему?
     """
     from .variants import params
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-
     a, b, alpha, beta, f = params(v)
     x0, x1 = a, b
     # a, b = -10, 10
+
+    L = 2
+    n_intervals = [L ** q for q in range(2, 11)]
+    n_nodes = 3
+
     exact = sp_quad(lambda x: f(x) / (x-a)**alpha / (b-x)**beta, x0, x1)[0]
 
+    Y = [composite_quad(f, x0, x1, n_intervals=n, n_nodes=n_nodes,
+                        a=a, b=b, alpha=alpha, beta=beta) for n in n_intervals]
+    accuracy = get_log_error(Y, exact * np.ones_like(Y))
+
+    x = np.log10(n_intervals)
+    aitken_degree = aitken(*Y[5:8], L)
+    a1, a0 = np.polyfit(x, accuracy, 1)
+    assert a1 > 1, 'composite quad did not converge!'
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+
     # plot weights
-    xs = np.linspace(x0, x1, 101)
+    xs = np.linspace(x0, x1, n_intervals[-1]+1)
     ys = 1 / ((xs-a)**alpha * (b-xs)**beta)
 
     ax1.plot(xs, ys, label='weights')
@@ -75,23 +90,13 @@ def test_composite_quad_degree(v):
     ax1.set_ylabel('p(x)')
     ax1.legend()
 
-    L = 2
-    n_intervals = [L ** q for q in range(2, 10)]
-    n_nodes = 3
-    Y = [composite_quad(f, x0, x1, n_intervals=n, n_nodes=n_nodes,
-                        a=a, b=b, alpha=alpha, beta=beta) for n in n_intervals]
-    accuracy = get_log_error(Y, exact * np.ones_like(Y))
-    x = np.log10(n_intervals)
-    k, b = np.polyfit(x, accuracy, 1)
-    assert k > 1, 'composite quad did not converge!'
-    aitken_degree = aitken(*Y[5:8], L)
-
     # plot acc
     ax2.plot(x, accuracy, 'kh')
-    ax2.plot(x, k*x+b, 'b:', label=f'{k:.2f}*x+{b:.2f}')
+    ax2.plot(x, a1*x+a0, 'b:', label=f'{a1:.2f}*x+{a0:.2f}')
     ax2.set_xlabel('log10(n_intervals)')
     ax2.set_ylabel('accuracy')
     ax2.legend()
+
     fig.suptitle(f'variant #{v} (alpha={alpha:4.2f}, beta={beta:4.2f})\n'
                  f'aitken estimation: {aitken_degree:.2f}')
     plt.show()
@@ -99,7 +104,7 @@ def test_composite_quad_degree(v):
 
 def test_gauss_vs_cq():
     """
-    check quad_gauss() versus composite_quad() on the same number of function evaluations
+    Проверяем, как работают quad_gauss() и composite_quad() при одинакомом количестве обращений к функции
     """
     x0, x1 = 0, np.pi/2
 
@@ -134,7 +139,7 @@ def test_gauss_vs_cq():
 
 def test_integrate():
     """
-    integrate with a given tolerance
+    Интегрируем с заданной точностью
     """
     p = Harmonic(1, 0)
     x0, x1 = 0, np.pi
