@@ -4,7 +4,7 @@ import scipy
 
 class RKScheme:
     """
-    Runge-Kutta scheme (A,b) of order p
+    Схема Рунге-Кутты с параметрами (A, b) порядка p
     """
     def __init__(self, name, A, b, p):
         self.name = name
@@ -15,9 +15,9 @@ class RKScheme:
 
 class EmbeddedRKScheme(RKScheme):
     """
-    Embedded Runge-Kutta scheme (A,b,e) of orders p(q)
-    p is the order of RK scheme (A,b)
-    q is the order of RK scheme (A,b+e)
+    Вложенная схема Рунге-Кутты с параметрами (A, b, e):
+        - p: порядок схемы (A, b)
+        - q: порядок схемы (A, b+e)
     """
     def __init__(self, name, A, b, e, p, q):
         super().__init__(name, A, b, p)
@@ -27,9 +27,9 @@ class EmbeddedRKScheme(RKScheme):
 
 class EmbeddedRosenbrockScheme:
     """
-    Embedded Rosenbrock scheme (A,G,gamma,b,e) of orders p(q)
-    p is the order of Rosenbrock scheme (A,G,gamma,b)
-    q is the order of Rosenbrock scheme (A,G,gamma,b+e)
+    Вложенная схема Розенброка с параметрами (A, G, gamma, b, e):
+        - p: порядок схемы (A, G, gamma, b)
+        - q: порядок схемы (A, G, gamma, b+e)
     """
     def __init__(self, name, A, G, gamma, b, e, p, q):
         self.name = name
@@ -42,7 +42,7 @@ class EmbeddedRosenbrockScheme:
         self.q = q
 
 
-#  classic Runge-Kutta ("The Runge-Kutta") method
+#  Классический метод Рунге-Кутты 4 порядка
 rk4_coeffs = RKScheme(
     name='RK4',
     A=[
@@ -55,7 +55,8 @@ rk4_coeffs = RKScheme(
     p=4,
 )
 
-#  Dormand-Prince method
+
+#  Метод Дорманда-Принса 5(4)
 dopri_coeffs = EmbeddedRKScheme(
     name='DoPri5(4)',
     A=[
@@ -73,6 +74,7 @@ dopri_coeffs = EmbeddedRKScheme(
     q=4,
 )
 
+#  Метод Розенброка 2(3)
 v2 = np.sqrt(2)
 d = 1/(2+v2)
 rosenbrock23_coeffs = EmbeddedRosenbrockScheme(

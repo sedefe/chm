@@ -11,9 +11,9 @@ class AdaptType(enum.Enum):
 
 def fix_step_integration(method: OneStepMethod, func, y_start, ts):
     """
-    performs fix-step integration using one-step method
-    ts: array of timestamps
-    return: list of t's, list of y's
+    Выполняем интегрирование одношаговм метдом с фиксированным шагом
+    ts: набор значений t
+    returns: list of t, list of y
     """
     ys = [y_start]
 
@@ -30,13 +30,13 @@ def adaptive_step_integration(method: OneStepMethod, func, y_start, t_span,
                               adapt_type: AdaptType,
                               atol, rtol):
     """
-    performs adaptive-step integration using one-step method
+    Выполняем интегирование одношаговым методом с адаптивным шагом
     t_span: (t0, t1)
-    adapt_type: Runge or Embedded
-    tolerances control the error:
+    adapt_type: правило Рунге (AdaptType.RUNGE) или вложенная схема (AdaptType.EMBEDDED)
+    допуски контролируют локальную погрешность:
         err <= atol
         err <= |y| * rtol
-    return: list of t's, list of y's
+    returns: list of t, list of y
     """
     y = y_start
     t, t_end = t_span

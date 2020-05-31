@@ -4,7 +4,7 @@ import numpy.linalg as la
 
 def transform(A, b):
     """
-    Ax = b -> x = Cx+d
+    Преобразуем систему: Ax = b -> x = Cx+d
     """
     C = A.copy()
     d = b.copy()
@@ -17,7 +17,7 @@ def transform(A, b):
 
 def richardson(A, b, tol, max_iter=100):
     """
-    Richardson method, tau_k = ||A||
+    Метод Ричардсона, tau_k = ||A||
     returns: list of x, list of y
     """
     tau = la.norm(A)
@@ -41,7 +41,7 @@ def richardson(A, b, tol, max_iter=100):
 
 def jacobi(A, b, tol, max_iter=100):
     """
-    Jacobi method
+    Метод Якоби
     returns: list of x, list of y
     """
     raise NotImplementedError
@@ -50,7 +50,7 @@ def jacobi(A, b, tol, max_iter=100):
 
 def seidel(A, b, tol, max_iter=100):
     """
-    Gauss-Seidel method
+    Метод Гаусса-Зейделя
     returns: list of x, list of y
     """
     raise NotImplementedError

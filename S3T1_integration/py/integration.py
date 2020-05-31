@@ -3,7 +3,8 @@ import numpy as np
 
 def moments(max_s, xl, xr, a=None, b=None, alpha=0.0, beta=0.0):
     """
-    compute 0..max_s moments of the weight function p(x) = 1 / (x-a)^alpha / (b-x)^beta over [xl, xr]
+    Вычисляем моменты весовой функции с 0-го по max_s-ый на интервале [xl, xr]
+    Весовая функция: p(x) = 1 / (x-a)^alpha / (b-x)^beta
     """
     assert alpha * beta == 0, f'alpha ({alpha}) and/or beta ({beta}) must be 0'
     if alpha != 0.0:
@@ -19,7 +20,9 @@ def moments(max_s, xl, xr, a=None, b=None, alpha=0.0, beta=0.0):
 
 def runge(s0, s1, m, L):
     """
-    estimate m-degree errors for s0 and s1
+    Оцениваем погрешность приближений s0 и s1 по правилу Рунге
+    m - порядок погрешности
+    L - кратность s0 и s1
     """
     d0 = np.abs(s1 - s0) / (1 - L ** -m)
     d1 = np.abs(s1 - s0) / (L ** m - 1)
@@ -28,45 +31,51 @@ def runge(s0, s1, m, L):
 
 def aitken(s0, s1, s2, L):
     """
-    estimate accuracy degree
-    s0, s1, s2: consecutive composite quads
-    return: accuracy degree estimation
+    Оцениваем сходимость по правилу Эйткена
+    s0, s1, s2: последовательный приближения интеграла
     """
     raise NotImplementedError
 
 
 def quad(func, x0, x1, xs, **kwargs):
     """
-    func: function to integrate
-    x0, x1: interval to integrate on
-    xs: nodes
-    **kwargs passed to moments()
+    ИКФ
+    func: интегрируемая функция
+    x0, x1: интервал
+    xs: узлы
+    **kwargs должны передаваться в moments()
     """
     raise NotImplementedError
 
 
 def quad_gauss(func, x0, x1, n, **kwargs):
     """
-    func: function to integrate
-    x0, x1: interval to integrate on
-    n: number of nodes
+    ИКФ типа Гаусса
+    func: интегрируемая функция
+    x0, x1: интервал
+    n: количество узлов
+    **kwargs должны передаваться в moments()
     """
     raise NotImplementedError
 
 
 def composite_quad(func, x0, x1, n_intervals, n_nodes, **kwargs):
     """
-    func: function to integrate
-    x0, x1: interval to integrate on
-    n_intervals: number of intervals
-    n_nodes: number of nodes on each interval
+    СКФ
+    func: интегрируемая функция
+    x0, x1: интервал
+    n_intervals: количество интервалов
+    n_nodes: количество узлов на каждом интервале
     """
     raise NotImplementedError
 
 
 def integrate(func, x0, x1, tol):
     """
-    integrate with error <= tol
-    return: result, error estimation
+    Интегрируем с заданной точностью (error <= tol)
+    Оцениваем сходимость по Эйткену, потом оцениваем погрешность по Рунге
+    Нужно вернуть:
+        - значение интеграла
+        - оценку погрешности
     """
     raise NotImplementedError

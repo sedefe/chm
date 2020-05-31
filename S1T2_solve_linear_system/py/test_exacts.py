@@ -106,7 +106,7 @@ def test_qr_solve(n):
 
 def test_condition():
     """
-    Проверяем число обусловленностей
+    Проверяем, как меняется число обусловленностей при LU и QR
     Q: как оно влияет на решение СЛАУ?
     """
     with np.printoptions(precision=3, suppress=True):

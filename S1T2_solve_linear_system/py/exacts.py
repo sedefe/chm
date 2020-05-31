@@ -4,7 +4,7 @@ import numpy.linalg as la
 
 def solve_upper_triang(A, b):
     """
-    solves Ax=b for U-triangular A
+    Решаем Ax=b для верхнетреугольной A
     """
     A = np.array(A, ndmin=2)
     b = np.reshape(b, (-1, 1))
@@ -23,7 +23,7 @@ def solve_upper_triang(A, b):
 
 def solve_lower_triang(A, b):
     """
-    solves Ax=b for L-triangular A
+    Решаем Ax=b для нижнетреугольной A
     """
     raise NotImplementedError
     return x
@@ -31,7 +31,7 @@ def solve_lower_triang(A, b):
 
 def lu(A):
     """
-    LU decomposition
+    LU разложение
     """
     raise NotImplementedError
     return l, u
@@ -39,7 +39,7 @@ def lu(A):
 
 def qr(A):
     """
-    QR decomposition
+    QR разложение
     """
     raise NotImplementedError
     return q, r
@@ -47,7 +47,7 @@ def qr(A):
 
 def solve_lu(A, b):
     """
-    solve Ax=b using LU decomposition
+    Решаем Ax=b с помощью LU разложения
     """
     L, U = lu(A)
     b1 = solve_lower_triang(L, b)
@@ -56,7 +56,7 @@ def solve_lu(A, b):
 
 def solve_qr(A, b):
     """
-    solve Ax=b using QR decomposition
+    Решаем Ax=b с помощью QR разложения
     """
     Q, R = qr(A)
     b = np.reshape(b, (-1, 1))

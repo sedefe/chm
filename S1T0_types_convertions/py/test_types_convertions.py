@@ -9,7 +9,6 @@ def test_uint():
     """
     Проверяем преобразования для unsigned int
     """
-    print(f'running unsigned conversion test')
     for x in [0, 1, 4, 88, 2**32-1]:
         s = tc.dec2bin(x, signed=False)
         assert len(s) == 32
@@ -21,7 +20,6 @@ def test_int():
     """
     Проверяем преобразования для signed int
     """
-    print(f'running signed conversion test')
     for x, s in [
         (0, '0'*32),
         (-1, '1'*32),
@@ -39,8 +37,6 @@ def test_float():
     """
     Проверяем преобразования для  floating point
     """
-    print(f'running floating point test')
-
     def split_float(s: str):
         return s[:1], s[1:9], s[9:32]
 
@@ -73,7 +69,7 @@ def test_float_log2():
 
 def test_fast_inv_sqrt():
     """
-    Проверяем быстрое вычисление обратного квадратного корная при помощи трюка с плавающей запятой
+    Проверяем быстрое вычисление обратного квадратного корня при помощи трюка с плавающей запятой
     https://en.wikipedia.org/wiki/Fast_inverse_square_root
     """
     def fast_inv_sqrt(x, n_iter=1):

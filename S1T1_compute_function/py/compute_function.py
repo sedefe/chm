@@ -5,7 +5,7 @@ from sympy.abc import x
 
 def is_polynome(function):
     """
-    check if function is a polynome
+    Проверяем, не полином ли наша функция
     """
     if function.as_poly(x):
         return True
@@ -14,14 +14,14 @@ def is_polynome(function):
 
 def is_elementary(function):
     """
-    check if function is exp(x), cos(x), ... or sqrt(x)
+    Проверяем, что наша функция элементарная: exp(x), cos(x), ... или sqrt(x)
     """
     return len(function.args) == 1 or (function.func == sp.Pow and function.args[1] == sp.Number('1/2'))
 
 
 def is_division(function):
     """
-    check if function is g(x)/h(x)
+    Проверяем, что наша функция - это дробь g(x)/h(x)
     """
     if function.func == sp.Mul:
         if function.args[0].func == sp.Pow:
@@ -35,7 +35,7 @@ def is_division(function):
 
 def get_division_args(function):
     """
-    get g() and h() for f(x) = g(x)/h(x)
+    Получаем делимое g() и делитель h() для функции f(x) = g(x)/h(x)
     """
     if function.args[0].func == sp.Pow:
         return function.args[1], function.args[0].args[0]
@@ -45,15 +45,16 @@ def get_division_args(function):
 
 def estimate_abs(function, x0):
     """
-    estimate |f(x)| boundaries
+    Оцениваем границы |f(x)| в районе точки x0
+    Прикидываемся, что не знаем её точного значения в этой точке, и берём по 10% вниз и вверх
     """
-    f0 = function.subs({x: x0})  # let's pretend we don't know this value
+    f0 = function.subs({x: x0})
     return 0.9*abs(f0), 1.1*abs(f0) + 0.1
 
 
 def calc_elem_func(func, x0, eps):
     """
-    numerically calculates elementary functions
+    Численно находим элементарные функции
     """
 
     # sqrt(x)
@@ -99,11 +100,11 @@ def calc_elem_func(func, x0, eps):
 
 
 def calc(function, x0, eps):
-    # firstly, check if it's polynome
+    # Сначала проверяем, не полином ли это
     if is_polynome(function):
         return function.subs({x: x0})
 
-    # then check if it's elementary
+    # Потом проверяем, не элементарная ли она
     if is_elementary(function):
         g = function.args[0]
         f_du = function.diff()
@@ -111,7 +112,7 @@ def calc(function, x0, eps):
         u = calc(g, float(x0), eps / b)
         return calc_elem_func(function.func, u, eps)
 
-    # at last, check top-level term
+    # Если дошли досюда, то имеем дело со сложной функцией
     if len(function.args) == 2:
 
         # f(x) = g(x) + h(x)

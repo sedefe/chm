@@ -10,20 +10,19 @@ from utils.ode_collection import ODE
 class OneStepMethod:
     def __init__(self, **kwargs):
         self.name = 'default_method'
-        self.p = None  # order
+        self.p = None  # порядок
         self.__dict__.update(**kwargs)
 
     def step(self, func: ODE, t, y, dt):
         """
-        make a step: t => t+dt
+        делаем шаг: t => t+dt
         """
         raise NotImplementedError
 
 
 class ExplicitEulerMethod(OneStepMethod):
     """
-    Explicit Euler method (no need to modify)
-    order is 1
+    Явный метод Эйлера (ничего менять не нужно)
     """
     def __init__(self):
         super().__init__(name='Euler (explicit)', p=1)
@@ -34,8 +33,8 @@ class ExplicitEulerMethod(OneStepMethod):
 
 class ImplicitEulerMethod(OneStepMethod):
     """
-    Implicit Euler method
-    order is 1
+    Неявный метод Эйлера
+    https://en.wikipedia.org/wiki/Backward_Euler_method
     """
     def __init__(self):
         super().__init__(name='Euler (implicit)', p=1)
@@ -46,8 +45,8 @@ class ImplicitEulerMethod(OneStepMethod):
 
 class RungeKuttaMethod(OneStepMethod):
     """
-    Explicit Runge-Kutta method with (A, b) coefficients
-    Rewrite step() method without usage of built-in RK45()
+    Явный метод Рунге-Кутты с коэффициентами (A, b)
+    Замените метод step() так, чтобы он не использовал встроенный класс RK45
     """
     def __init__(self, coeffs: collection.RKScheme):
         super().__init__(**coeffs.__dict__)
@@ -62,12 +61,12 @@ class RungeKuttaMethod(OneStepMethod):
 
 class EmbeddedRungeKuttaMethod(RungeKuttaMethod):
     """
-    Embedded Runge-Kutta method with (A, b, e) coefficients:
+    Вложенная схема Рунге-Кутты с параметрами (A, b, e):
     y1 = RK(func, A, b)
-    y2 = RK(func, A, d), where d = b+e
-    embedded_step() method should return:
-        - approximation (y1)
-        - approximations difference (dy = y2-y1)
+    y2 = RK(func, A, d), где d = b+e
+    embedded_step() должен возвращать:
+        - приближение (y1)
+        - разность приближений (dy = y2-y1)
     """
     def __init__(self, coeffs: collection.EmbeddedRKScheme):
         super().__init__(coeffs=coeffs)
@@ -81,13 +80,13 @@ class EmbeddedRungeKuttaMethod(RungeKuttaMethod):
 
 class EmbeddedRosenbrockMethod(OneStepMethod):
     """
-    Embedded Rosenbrock method with (A, G, gamma, b, e) coefficients:
+    Вложенный метод Розенброка с параметрами (A, G, gamma, b, e):
     y1 = Rosenbrock(func, A, G, gamma, b)
-    y2 = Rosenbrock(func, A, G, gamma, d), where d = b+e
-    embedded_step() method should return:
-        - approximation (y1)
-        - approximations difference (dy = y2-y1)
-    See eq.2 in https://dl.acm.org/doi/10.1145/355993.355994 for details
+    y2 = Rosenbrock(func, A, G, gamma, d), где d = b+e
+    embedded_step() должен возвращать:
+        - приближение (y1)
+        - разность приближений (dy = y2-y1)
+    Подробности см. в https://dl.acm.org/doi/10.1145/355993.355994 (уравнение 2)
     """
     def __init__(self, coeffs: collection.EmbeddedRosenbrockScheme):
         super().__init__(**coeffs.__dict__)

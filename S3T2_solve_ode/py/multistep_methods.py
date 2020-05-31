@@ -2,7 +2,7 @@ import numpy as np
 from S3T2_solve_ode.py.one_step_methods import OneStepMethod
 
 
-#  coefficients for Adams methods
+#  Коэффиенты методов Адамса
 adams_coeffs = {
     1: [1],
     2: [-1 / 2, 3 / 2],
@@ -14,9 +14,9 @@ adams_coeffs = {
 
 def adams(func, y_start, T, coeffs, one_step_method: OneStepMethod):
     """
-    T: list of timestamps
-    coeffs: list of coefficients
-    one_step_method: method for initial steps
-    return list of t (same as T), list of y
+    T: список точек, по которым мы шагаем (шаг постоянный)
+    coeffs: список коэффициентов метода Адамса
+    one_step_method: одношаговый метод для разгона
+    returns: list of t (same as T), list of y
     """
     raise NotImplementedError

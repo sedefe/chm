@@ -5,10 +5,10 @@ from sympy.abc import x, y
 
 def solve_scalar(f: sp.Expr, x0, tol):
     """
-    solve scalar equation y=f(x) starting with x0
-    derivative can be obtained as f.diff()
-    evaluate: float(f.subs(x, x0))
-    return list of x, list of y
+    Решаем скалярное уравнение y=f(x), начиная с точки x0
+    Производную можно получать так: f.diff()
+    Подставить значения вместо переменных: float(f.subs(x, x0))
+    returns: list of x, list of y
     """
     raise NotImplementedError
     return xs, ys
@@ -16,9 +16,9 @@ def solve_scalar(f: sp.Expr, x0, tol):
 
 def solve_plane(f: sp.Matrix, x0, y0, tol):
     """
-    solve SAE {f1(x,y) = 0, f2(x,y) = 0} starting with (x0,y0)
-    jacobian can be obtained as f.jacobian([x, y])
-    return list of x, list of y, list of np.linalg.norm(z)
+    Решаем систему двух алгебраических уравнений {f1(x,y) = 0, f2(x,y) = 0}, начиная с точки (x0,y0)
+    Якобиан можно получать так: f.jacobian([x, y])
+    returns: list of x, list of y, list of np.linalg.norm(z)
     """
     raise NotImplementedError
     return xs, ys, zs
