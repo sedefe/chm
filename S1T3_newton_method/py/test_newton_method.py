@@ -16,6 +16,9 @@ from S1T3_newton_method.py.newton_method import solve_scalar, solve_plane
                          ]
                          )
 def test_solve_scalar(f, x0):
+    """
+    Проверяем решение скалярных уравнений
+    """
     interval = -10, 10
 
     fig, (ax1, ax2) = plt.subplots(1, 2)
@@ -55,6 +58,9 @@ def test_solve_scalar(f, x0):
                              (sp.Matrix([sp.cos(x) + y - 1.2, 2 * x - sp.sin(y - 0.5) - 2]), 0, 0),
                          ])
 def test_solve_plane(f, x0, y0):
+    """
+    Проверяем решение векторных уравнений
+    """
     # get iterations
     tol = 1e-9
     xs, ys, zs = solve_plane(f, x0, y0, tol)

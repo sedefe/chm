@@ -7,7 +7,8 @@ from S1T2_solve_linear_system.py.iteratives import richardson, jacobi, seidel
 
 def test_iteratives():
     """
-    Q: which method is the best? why?
+    Сравниваем итерационные методы
+    Q: который лучше? Почему?
     """
     n = 5
     A = np.array([
@@ -41,8 +42,8 @@ def test_iteratives():
 
 def test_convergence():
     """
-    same as the previous, but with tol = 1e-20
-    Q: why can't we meet the requirements?
+    То же, что и в прошлом, но tol = 1e-20
+    Q: почему мы не может достичь заданной точности?
     """
     n = 5
     A = np.array([

@@ -123,7 +123,7 @@ def test_quad_gauss_degree():
         accuracy = get_log_error(Y, y0 * np.ones_like(Y))
         accuracy[accuracy > 17] = 17
 
-        # check accuracy is good enough
+        # Проверяем точность
         for node_count, acc in zip(max_node_count, accuracy):
             if 2 * node_count >= deg + 1:
                 assert acc > 6

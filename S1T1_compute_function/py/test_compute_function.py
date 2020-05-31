@@ -19,6 +19,9 @@ from S1T1_compute_function.py import compute_function as cf
                          )
 @pytest.mark.parametrize('tol', 10. ** np.array(range(-1, -10, -1)))
 def test_elementaries(func, tol):
+    """
+    Проверяем вычисление элементарных функций
+    """
     for x0 in np.linspace(0, 2, 11):
         sp_func = func(x).func  # convert sp.sqrt() to sp.Pow()
         res = cf.calc_elem_func(sp_func, x0=x0, eps=tol)
@@ -43,6 +46,9 @@ def test_elementaries(func, tol):
                          )
 @pytest.mark.parametrize('tol', 10. ** np.array([-1, -3, -5]))
 def test_composites(function, tol):
+    """
+    Проверяем вычисление сложных функций
+    """
     for x0 in np.linspace(0, 1, 11):
         res = cf.calc(function, x0=x0, eps=tol)
         exact = function.subs({x: x0})

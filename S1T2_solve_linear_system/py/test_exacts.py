@@ -12,9 +12,9 @@ from S1T2_solve_linear_system.py.exacts import (qr, lu,
 
 def test_lu():
     """
-    check your LU vs SciPy's LU
-    NB: SciPy's returns (P,L,U), where P is a permutational matrix, but here P is identity matrix
-    Q: what's the complexity of your LU algorithm?
+    Сравниваем наше LU с LU из SciPy
+    NB: вообще SciPy возвращет (P,L,U), где P - перестановочная матрица, но тут она единичная
+    Q: какова сложность нашей реализации LU?
     """
     with np.printoptions(precision=3, suppress=True):
         A = np.array([
@@ -32,9 +32,9 @@ def test_lu():
 
 def test_qr():
     """
-    check your QR vs NumPy's QR
-    NB: signs of Q's and R's can differ
-    Q: what's the complexity of your QR algorithm?
+    Сравниваем наше QR с QR из NumPy
+    NB: Q и R вычисляются с точностью до знака
+    Q: какова сложность нашей реализации QR?
     """
     with np.printoptions(precision=3, suppress=True):
         A = np.array([
@@ -55,6 +55,9 @@ def test_qr():
 
 
 def test_triangle_solve():
+    """
+    Проверяем решение СЛАУ с треугольными матрицами
+    """
     A = np.array([
         [1, 0, 0],
         [2, 1, 0],
@@ -71,6 +74,9 @@ def test_triangle_solve():
 
 @pytest.mark.parametrize('n', range(0, 20))
 def test_lu_solve(n):
+    """
+    Проверяем решение через LU
+    """
     A = np.array([
         [n+2, 1, 1],
         [1, n+4, 1],
@@ -84,6 +90,9 @@ def test_lu_solve(n):
 
 @pytest.mark.parametrize('n', range(0, 20))
 def test_qr_solve(n):
+    """
+    Проверяем решение через QR
+    """
     A = np.array([
         [n+2, 1, 1],
         [1, n+4, 1],
@@ -97,8 +106,8 @@ def test_qr_solve(n):
 
 def test_condition():
     """
-    check condition numbers
-    Q: how condition number affect solving linear system?
+    Проверяем число обусловленностей
+    Q: как оно влияет на решение СЛАУ?
     """
     with np.printoptions(precision=3, suppress=True):
         rnd = np.random.RandomState(88)

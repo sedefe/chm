@@ -7,7 +7,7 @@ from S1T0_types_convertions.py import types_convertions as tc
 
 def test_uint():
     """
-    check unsigned int conversions
+    Проверяем преобразования для unsigned int
     """
     print(f'running unsigned conversion test')
     for x in [0, 1, 4, 88, 2**32-1]:
@@ -19,7 +19,7 @@ def test_uint():
 
 def test_int():
     """
-    check signed int conversions
+    Проверяем преобразования для signed int
     """
     print(f'running signed conversion test')
     for x, s in [
@@ -37,7 +37,7 @@ def test_int():
 
 def test_float():
     """
-    check floating point conversions
+    Проверяем преобразования для  floating point
     """
     print(f'running floating point test')
 
@@ -54,7 +54,7 @@ def test_float():
 
 def test_float_log2():
     """
-    check linear dependency of log2(x) and x converted to uint
+    Проверяем линейную зависимости между log2(x) и целочисленной интерпретацией x
     """
     X = np.linspace(0, 16, 100)[1:]
     Y_log = np.log2(X)
@@ -73,7 +73,8 @@ def test_float_log2():
 
 def test_fast_inv_sqrt():
     """
-    calculate fast inverse square root by floating point trick
+    Проверяем быстрое вычисление обратного квадратного корная при помощи трюка с плавающей запятой
+    https://en.wikipedia.org/wiki/Fast_inverse_square_root
     """
     def fast_inv_sqrt(x, n_iter=1):
         c = 0x5f3759df
