@@ -49,24 +49,24 @@ def test_quad_degree():
     x0, x1 = 0, 1
 
     max_degree = 7
+    max_nodes = 7
 
-    for deg in range(1, max_degree):
+    for deg in range(max_degree):
         p = Monome(deg)
         y0 = p[x0, x1]
 
-        max_node_count = range(1, max_degree+1)
+        node_counts = range(1, max_nodes+1)
 
-        Y = [quad(p, x0, x1, np.linspace(x0, x1, node_count)) for node_count in max_node_count]
+        Y = [quad(p, x0, x1, np.linspace(x0, x1, node_count)) for node_count in node_counts]
         # Y = [quad(p, x0, x1, x0 + (x1-x0) * np.random.random(node_count)) for node_count in max_node_count]
         accuracy = get_accuracy(Y, y0 * np.ones_like(Y))
-        accuracy[accuracy > 17] = 17
 
         # Проверяем точность
-        for node_count, acc in zip(max_node_count, accuracy):
+        for node_count, acc in zip(node_counts, accuracy):
             if node_count >= deg + 1:
                 assert acc > 6
 
-        plt.plot(max_node_count, accuracy, '.:', label=f'x^{deg}')
+        plt.plot(node_counts, accuracy, '.:', label=f'x^{deg}')
 
     plt.legend()
     plt.ylabel('accuracy')
@@ -114,21 +114,20 @@ def test_quad_gauss_degree():
 
     max_degree = 8
 
-    for deg in range(2, max_degree):
+    for deg in range(max_degree):
         p = Monome(deg)
         y0 = p[x0, x1]
 
-        max_node_count = range(2, 6)
-        Y = [quad_gauss(p, x0, x1, node_count) for node_count in max_node_count]
+        node_counts = range(1, 6)
+        Y = [quad_gauss(p, x0, x1, node_count) for node_count in node_counts]
         accuracy = get_accuracy(Y, y0 * np.ones_like(Y))
-        accuracy[accuracy > 17] = 17
 
         # Проверяем точность
-        for node_count, acc in zip(max_node_count, accuracy):
+        for node_count, acc in zip(node_counts, accuracy):
             if 2 * node_count >= deg + 1:
                 assert acc > 6
 
-        plt.plot(max_node_count, accuracy, '.:', label=f'x^{deg}')
+        plt.plot(node_counts, accuracy, '.:', label=f'x^{deg}')
 
     plt.legend()
     plt.ylabel('accuracy')
