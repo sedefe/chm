@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from utils.ode_collection import Harmonic
-from utils.utils import get_log_error
+from utils.utils import get_accuracy
 from S3T2_solve_ode.py.solve_ode import fix_step_integration
 from S3T2_solve_ode.py.one_step_methods import (
     ExplicitEulerMethod,
@@ -48,7 +48,7 @@ def test_one_step():
                  [_y[0] for _y in y],
                  f'{colors[i]}.--', label=method.name)
         ax2.plot(ts,
-                 get_log_error(exact, y),
+                 get_accuracy(exact, y),
                  f'{colors[i]}.--', label=method.name)
 
     ax1.set_xlabel('t'), ax1.set_ylabel('y'), ax1.legend()
@@ -85,7 +85,7 @@ def test_multi_step():
             n_calls = f.get_call_counter()
             print(f'{p}-order multi-step with one-step {one_step_method.name}: {n_calls} function calls')
 
-            err = get_log_error(exact, y_adams)
+            err = get_accuracy(exact, y_adams)
 
             label = f"Adams's order {p}"
             ax1.plot(t_adams, [y[0] for y in y_adams], '.--', label=label)

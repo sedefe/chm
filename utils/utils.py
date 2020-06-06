@@ -9,7 +9,7 @@ def call_counter(func):
     return helper
 
 
-def get_log_error(x, y, eps=1e-17, axis=1):
+def get_accuracy(x, y, eps=1e-17, axis=1):
     x = np.array(x)
     y = np.array(y)
     if len(x.shape) == 1:

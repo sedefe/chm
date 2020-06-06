@@ -3,6 +3,7 @@ import numpy.linalg as la
 import matplotlib.pyplot as plt
 
 from S1T2_solve_linear_system.py.iteratives import richardson, jacobi, seidel
+from utils.utils import get_accuracy
 
 
 def test_iteratives():
@@ -27,7 +28,7 @@ def test_iteratives():
 
     for method, color, name in zip(methods, colors, names):
         xs, ys = method(A, b, tol)
-        plt.plot(range(len(ys)), -np.log10(np.abs(ys)), f'{color}.-', label=name)
+        plt.plot(range(len(ys)), get_accuracy(ys, np.zeros_like(ys)), f'{color}.-', label=name)
         assert np.linalg.norm(A@xs[-1] - b) <= tol, f'{name} method failed'
 
     axes = plt.axis()
@@ -62,7 +63,7 @@ def test_convergence():
 
     for method, color, name in zip(methods, colors, names):
         xs, ys = method(A, b, tol)
-        plt.plot(range(len(ys)), -np.log10(np.abs(ys)), f'{color}.-', label=name)
+        plt.plot(range(len(ys)), get_accuracy(ys, np.zeros_like(ys)), f'{color}.-', label=name)
 
     axes = plt.axis()
     plt.plot(axes[:2], -np.log10([tol, tol]), 'k:', label='tolerance')

@@ -3,13 +3,13 @@ import numpy as np
 
 def func(x):
     """
-    Целевая функция (векторизовання)
+    Целевая функция (векторизованная): должна принимать линейный массив и возвращать линейный массив
     """
     return np.exp(np.cos(x))
 
 
-def interpol(X, Y):
+def interpol(xs, ys):
     """
     Полиномиальная интерполяция по X и Y. Нужно вернуть коэффициенты интерполяционного многочлена
     """
-    return np.polyfit(X, Y, len(X)-1)
+    return np.polyfit(xs, ys, len(xs) - 1)

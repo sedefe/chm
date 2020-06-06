@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from utils.integrate_collection import Monome, Harmonic
 
-from utils.utils import get_log_error
+from utils.utils import get_accuracy
 from S3T1_integration.py.integration import (quad,
                                              quad_gauss,
                                              moments)
@@ -58,7 +58,7 @@ def test_quad_degree():
 
         Y = [quad(p, x0, x1, np.linspace(x0, x1, node_count)) for node_count in max_node_count]
         # Y = [quad(p, x0, x1, x0 + (x1-x0) * np.random.random(node_count)) for node_count in max_node_count]
-        accuracy = get_log_error(Y, y0 * np.ones_like(Y))
+        accuracy = get_accuracy(Y, y0 * np.ones_like(Y))
         accuracy[accuracy > 17] = 17
 
         # Проверяем точность
@@ -120,7 +120,7 @@ def test_quad_gauss_degree():
 
         max_node_count = range(2, 6)
         Y = [quad_gauss(p, x0, x1, node_count) for node_count in max_node_count]
-        accuracy = get_log_error(Y, y0 * np.ones_like(Y))
+        accuracy = get_accuracy(Y, y0 * np.ones_like(Y))
         accuracy[accuracy > 17] = 17
 
         # Проверяем точность

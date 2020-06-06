@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from utils.ode_collection import Harmonic, HarmExp, Arenstorf
-from utils.utils import get_log_error
+from utils.utils import get_accuracy
 from S3T2_solve_ode.py.solve_ode import adaptive_step_integration, AdaptType
 from S3T2_solve_ode.py.one_step_methods import (
     ExplicitEulerMethod,
@@ -67,7 +67,7 @@ def test_adaptive(f, y0):
     for (m, _), ts, ys in zip(methods, tss, yss):
         ax1.plot(ts, [y[0] for y in ys], '.', label=m.name)
         ax2.plot(ts[:-1], ts[1:] - ts[:-1], '.-', label=m.name)
-        ax3.plot(ts, get_log_error(f[ts].T, ys), '.-', label=m.name)
+        ax3.plot(ts, get_accuracy(f[ts].T, ys), '.-', label=m.name)
 
     ax1.legend()
     ax2.legend()

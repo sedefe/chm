@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from S1T0_types_convertions.py import types_convertions as tc
+from utils.utils import get_accuracy
 
 
 def test_uint():
@@ -96,7 +97,7 @@ def test_fast_inv_sqrt():
     ax1.legend()
 
     for i in range(3):
-        ax2.plot(X, -np.log10(np.abs(Y0 - Y[i])), f'{colors[i]}.:', label=f'{i}-iterations accuracy')
+        ax2.plot(X, get_accuracy(Y0, Y[i]), f'{colors[i]}.:', label=f'{i}-iterations accuracy')
     ax2.legend()
 
     plt.show()

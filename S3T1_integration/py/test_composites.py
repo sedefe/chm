@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from utils.integrate_collection import Monome, Harmonic
 
-from utils.utils import get_log_error
+from utils.utils import get_accuracy
 from S3T1_integration.py.integration import (quad_gauss,
                                              composite_quad,
                                              integrate,
@@ -27,7 +27,7 @@ def test_composite_quad(n_nodes):
     for i, degree in enumerate((5, 6)):
         p = Monome(degree)
         Y = [composite_quad(p, x0, x1, n_intervals=n, n_nodes=n_nodes) for n in n_intervals]
-        accuracy = get_log_error(Y, p[x0, x1] * np.ones_like(Y))
+        accuracy = get_accuracy(Y, p[x0, x1] * np.ones_like(Y))
         x = np.log10(n_intervals)
 
         # Оценка сходимости
@@ -69,7 +69,7 @@ def test_composite_quad_degree(v):
 
     Y = [composite_quad(f, x0, x1, n_intervals=n, n_nodes=n_nodes,
                         a=a, b=b, alpha=alpha, beta=beta) for n in n_intervals]
-    accuracy = get_log_error(Y, exact * np.ones_like(Y))
+    accuracy = get_accuracy(Y, exact * np.ones_like(Y))
 
     x = np.log10(n_intervals)
     aitken_degree = aitken(*Y[5:8], L)
@@ -121,10 +121,10 @@ def test_gauss_vs_cq():
         Y_gauss.append(quad_gauss(p, x0, x1, n_evals))
         Y_cquad.append(composite_quad(p, x0, x1, n, n_nodes))
 
-    accuracy_gauss = get_log_error(Y_gauss, y0 * np.ones_like(Y_gauss))
+    accuracy_gauss = get_accuracy(Y_gauss, y0 * np.ones_like(Y_gauss))
     accuracy_gauss[accuracy_gauss > 17] = 17
 
-    accuracy_cquad = get_log_error(Y_cquad, y0 * np.ones_like(Y_cquad))
+    accuracy_cquad = get_accuracy(Y_cquad, y0 * np.ones_like(Y_cquad))
     accuracy_cquad[accuracy_cquad > 17] = 17
 
     plt.plot(np.log10(n_intervals), accuracy_gauss, '.:', label=f'gauss')

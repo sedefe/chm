@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from S2T1_optimization.py import optimization
+from utils.utils import get_accuracy
+
 
 default_student = 0
 
@@ -46,7 +48,7 @@ def test_optimization(student, n_dim, projection):
         assert optimization.func.calls == len(Y), f'function was called {optimization.func.calls} times, ' \
                                                   f'but there is {len(Y)} point in the output'
 
-        ax1.plot(-np.log10([y - y1 for y in Y]), styles[i], label=method)
+        ax1.plot(get_accuracy(Y, y1*np.ones_like(Y)), styles[i], label=method)
         ax2.plot(*list(np.array(X).T), styles[i], label=method)
     ax2.plot(*[[x] for x in x1], 'kp', label='exact')
 
