@@ -1,11 +1,11 @@
 import numpy as np
-from enum import Enum
+from enum import Enum, auto
 
 
 class ApproxType(Enum):
-    algebraic = 0
-    legendre = 1
-    harmonic = 2
+    algebraic = auto()
+    legendre = auto()
+    harmonic = auto()
 
 
 def func(x):
