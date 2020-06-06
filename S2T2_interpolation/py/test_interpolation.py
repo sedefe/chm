@@ -4,6 +4,7 @@ from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
 from S2T2_interpolation.py import interpolation
+from utils.utils import get_log_error
 
 default_student = 0
 
@@ -16,39 +17,35 @@ def test_interpolation(student):
     A = -1  # change to what you prefer
     B = 3   # change to what you prefer
 
-    X_eq = np.linspace(A, B, N+1)
-    X_cheb = 1/2 * ((B-A) * np.cos(np.pi * (2*np.arange(0, N+1) + 1) / (2*(N + 1))) + (B+A))
-    X_dense = sorted([*np.linspace(A, B, M), *X_eq, *X_cheb])
-    Y_dense = interpolation.func(X_dense)
+    xs_eq = np.linspace(A, B, N+1)
+    xs_cheb = 1/2 * ((B-A) * np.cos(np.pi * (2*np.arange(0, N+1) + 1) / (2*(N + 1))) + (B+A))
+    xs_dense = sorted([*np.linspace(A, B, M), *xs_eq, *xs_cheb])
+    ys_dense = interpolation.func(xs_dense)
 
-    plt.figure(1)
-    plt.plot(X_dense, Y_dense, 'k-', label='actual')
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    ax1.plot(xs_dense, ys_dense, 'k-', label='actual')
     styles = ['b.:', 'm.:']
     labels = ['interp-eq', 'interp-cheb']
 
-    Xs = [X_eq, X_cheb]
-    for (i, X) in enumerate(Xs):
-        Y0 = interpolation.func(X)  # here's your function (change met2.func())
+    xss = [xs_eq, xs_cheb]
+    for (i, xs) in enumerate(xss):
+        Y0 = interpolation.func(xs)  # here's your function (change met2.func())
 
-        P = interpolation.interpol(X, Y0)    # here's your interpolation (change met2.interpol())
+        P = interpolation.interpol(xs, Y0)    # here's your interpolation (change met2.interpol())
         assert len(P) == N+1, f'polynome length should be {N+1}'
-        Y2 = np.polyval(P, X_dense)
+        Y2 = np.polyval(P, xs_dense)
 
-        plt.figure(1)
-        plt.plot(X_dense, Y2, styles[i], label=labels[i])
-        plt.figure(2)
-        plt.plot(X_dense, np.log10(np.abs(Y_dense - Y2)), styles[i], label=labels[i])
+        ax1.plot(xs_dense, Y2, styles[i], label=labels[i])
+        ax2.plot(xs_dense, get_log_error(ys_dense, Y2), styles[i], label=labels[i])
 
-    Y_spline = CubicSpline(X_eq, interpolation.func(X_eq))(X_dense)
+    ys_spline = CubicSpline(xs_eq, interpolation.func(xs_eq))(xs_dense)
 
-    plt.figure(1)
-    plt.title('Y(X)')
-    plt.plot(X_dense, Y_spline, 'c', label='spline')
-    plt.legend()
+    ax1.set_title('Y(X)')
+    ax1.plot(xs_dense, ys_spline, 'c', label='spline')
+    ax1.legend()
 
-    plt.figure(2)
-    plt.title('log error')
-    plt.plot(X_dense, np.log10(np.abs(Y_dense - Y_spline)), 'c', label='spline')
-    plt.legend()
+    ax2.set_title('accuracy')
+    ax2.plot(xs_dense, get_log_error(ys_dense, ys_spline), 'c', label='spline')
+    ax2.legend()
 
     plt.show()
