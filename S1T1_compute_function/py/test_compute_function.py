@@ -18,6 +18,7 @@ from S1T1_compute_function.py import compute_function as cf
                          ]
                          )
 @pytest.mark.parametrize('tol', 10. ** np.array(range(-1, -10, -1)))
+@pytest.mark.timeout(1)
 def test_elementaries(func, tol):
     """
     Проверяем вычисление элементарных функций
@@ -45,6 +46,7 @@ def test_elementaries(func, tol):
                          ]
                          )
 @pytest.mark.parametrize('tol', 10. ** np.array([-1, -3, -5]))
+@pytest.mark.timeout(1)
 def test_composites(function, tol):
     """
     Проверяем вычисление сложных функций
