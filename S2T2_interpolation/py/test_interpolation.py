@@ -1,52 +1,89 @@
 import pytest
 import numpy as np
-from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
+from enum import Enum, auto
 
-from S2T2_interpolation.py import interpolation
+from S2T2_interpolation.py.interpolation import LaGrange, Spline3
 from utils.utils import get_accuracy
 
 
-@pytest.mark.parametrize('fname,func', [
-    ['exp(sin(x))', lambda x: np.exp(np.sin(x))],
-    ['cos(exp(x))', lambda x: np.cos(np.exp(x))],
-    ['x^4', lambda x: x**4],
-])
-def test_interpolation(fname, func: callable):
-    n = 15
-    k_dense = 10
-    m = k_dense * n
-    a, b = -1, 3
+class NodeType(Enum):
+    EQ = auto()
+    CHEB = auto()
 
-    xs_eq = np.linspace(a, b, n)
-    xs_cheb = 1/2 * ((b - a) * np.cos(np.pi * (np.arange(n) + 1/2) / n) + (b + a))
-    xs_dense = np.array(sorted([*np.linspace(a, b, m), *xs_eq, *xs_cheb]))
-    ys_dense = func(xs_dense)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-    ax1.plot(xs_dense, ys_dense, 'k-', label='actual')
-    colors = 'bm'
-    labels = ['interp-eq', 'interp-cheb']
+class TestInterpolation:
 
-    for i, xs in enumerate([xs_eq, xs_cheb]):
-        ys = func(xs)
+    def _get_nodes(self, nodes_type: NodeType, a, b, n_nodes):
+        if nodes_type == NodeType.EQ:
+            return np.linspace(a, b, n_nodes)
+        if nodes_type == NodeType.CHEB:
+            return np.sort(1 / 2 * ((b - a) * np.cos(np.pi * (np.arange(n_nodes) + 1 / 2) / n_nodes) + (b + a)))
+        raise ValueError(f'Unknown node type {nodes_type}')
 
-        poly = interpolation.interpol(xs, ys)
-        assert len(poly) == n, f'polynome length should be {n}'
-        ys_dense_num = np.polyval(poly, xs_dense)
+    def _test_case(self, fname, func: callable, a, b, n_nodes):
+        """
+        Проверяем многочлен/сплайн при разном выборе точек (EQ/CHEB)
+        """
+        k_dense = 10
+        m = k_dense * n_nodes
 
-        ax1.plot(xs_dense, ys_dense_num, f'{colors[i]}:', label=labels[i])
-        ax1.plot(xs, ys, f'{colors[i]}.')
-        ax2.plot(xs_dense, get_accuracy(ys_dense, ys_dense_num), f'{colors[i]}-', label=labels[i])
+        # точки, в которых будем сравнивать с точным значением
+        xs_dense = np.array(sorted([*np.linspace(a, b, m),
+                                    *self._get_nodes(NodeType.EQ, a, b, n_nodes),
+                                    *self._get_nodes(NodeType.CHEB, a, b, n_nodes)]))
+        ys_dense = func(xs_dense)
 
-    ys_spline = CubicSpline(xs_eq, func(xs_eq))(xs_dense)
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 6))
+        ax1.plot(xs_dense, ys_dense, 'k-', label='exact')
 
-    ax1.set_title(f'{fname}')
-    ax1.plot(xs_dense, ys_spline, 'c:', label='spline')
-    ax1.legend()
+        interp_params = [
+            # color, interp_name, nodes_type, label
+            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
+            ['r', LaGrange, NodeType.CHEB, 'LaGrange-cheb'],
+            ['c', Spline3,  NodeType.EQ,   'Spline-eq'],
+            ['m', Spline3,  NodeType.CHEB, 'Spline-cheb'],
+        ]
 
-    ax2.set_title('accuracy')
-    ax2.plot(xs_dense, get_accuracy(ys_dense, ys_spline), 'c-', label='spline')
-    ax2.legend()
+        for (color, interp_name, nodes_type, label) in interp_params:
+            xs = self._get_nodes(nodes_type, a, b, n_nodes)
+            ys = func(xs)
 
-    plt.show()
+            interp = interp_name(xs, ys)
+            ys_dense_num = interp(xs_dense)
+
+            ax1.plot(xs_dense, ys_dense_num, f'{color}:', label=label)
+            ax1.plot(xs, ys, f'{color}.')
+            ax2.plot(xs_dense, get_accuracy(ys_dense, ys_dense_num), f'{color}-', label=label)
+
+        ax1.set_title(f'{fname}')
+        ax1.legend()
+
+        ax2.set_title('accuracy')
+        ax2.legend()
+
+        plt.show()
+
+    @pytest.mark.parametrize('fname, func',
+                             [
+                                 ['exp(sin(x))', lambda x: np.exp(np.sin(x))],
+                                 ['cos(exp(x))', lambda x: np.cos(np.exp(x))],
+                                 ['x^4', lambda x: x**4],
+                             ])
+    def test_interpolation(self, fname, func):
+        """
+        Простые случаи
+        """
+        n_nodes = 15
+        a, b = -1, 1
+        self._test_case(fname, func, a, b, n_nodes)
+
+    def test_runge(self):
+        """
+        https://en.wikipedia.org/wiki/Runge%27s_phenomenon
+        """
+        func = lambda x: 1 / (1 + x**2)
+        n_nodes = 15
+        a, b = -5, 5
+
+        self._test_case('1 / (1 + x**2)', func, a, b, n_nodes)
