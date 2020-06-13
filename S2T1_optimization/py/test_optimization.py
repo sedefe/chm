@@ -18,9 +18,9 @@ default_student = 0
 def test_optimization(student, n_dim, projection):
     N = student
 
-    A = np.array([[4,  1,      1],
-                  [1,  6+.2*N, -1],
-                  [1,  -1,      8+.2*N]],
+    A = np.array([[4,   1,      1],
+                  [1,   6+.2*N, -1],
+                  [1,   -1,     8+.2*N]],
                  dtype='float')[:n_dim, :n_dim]
     b = np.array([1, -2, 3], dtype='float').T[:n_dim]
     x0 = np.zeros_like(b)
@@ -40,23 +40,23 @@ def test_optimization(student, n_dim, projection):
 
     for i, method in enumerate(methods):
         optimization.func.calls = 0
-        X, Y = getattr(optimization, method)(A, b, x0, eps_y)
+        xs, ys = getattr(optimization, method)(A, b, x0, eps_y)
 
-        assert np.equal(x0, X[0]).all(), 'X should start with initial point'
-        assert np.linalg.norm(x1 - X[-1]) < eps_x, 'last X should be close enough to the optimum'
-        assert np.linalg.norm(y1 - Y[-1]) < eps_y, 'last Y should be close enough to the optimum'
-        assert optimization.func.calls == len(Y), f'function was called {optimization.func.calls} times, ' \
-                                                  f'but there is {len(Y)} point in the output'
+        assert np.equal(x0, xs[0]).all(), 'xs should start with initial point'
+        assert np.linalg.norm(x1 - xs[-1]) < eps_x, 'last xs should be close enough to the optimum'
+        assert np.linalg.norm(y1 - ys[-1]) < eps_y, 'last ys should be close enough to the optimum'
+        assert optimization.func.calls == len(ys), f'function was called {optimization.func.calls} times, ' \
+                                                   f'but there is {len(ys)} point in the output'
 
-        ax1.plot(get_accuracy(Y, y1*np.ones_like(Y)), styles[i], label=method)
-        ax2.plot(*list(np.array(X).T), styles[i], label=method)
+        ax1.plot(get_accuracy(ys, y1*np.ones_like(ys)), styles[i], label=method)
+        ax2.plot(*list(np.array(xs).T), styles[i], label=method)
     ax2.plot(*[[x] for x in x1], 'kp', label='exact')
 
     ax = ax1.axis()
-    ax1.plot(ax[:2], -np.log10([eps_y, eps_y]) , 'k-')
+    ax1.plot(ax[:2], -np.log10([eps_y, eps_y]), 'k-')
     ax1.set_xlabel('N iter')
     ax1.set_ylabel('acc')
     ax1.legend()
     ax2.legend()
-    fig.suptitle(f'Results for dimension {n_dim}')
+    fig.suptitle(f'Results for {n_dim}D')
     plt.show()
