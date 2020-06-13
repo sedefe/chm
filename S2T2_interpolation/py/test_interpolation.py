@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from enum import Enum, auto
 
-from S2T2_interpolation.py.interpolation import LaGrange, Spline3
+from S2T2_interpolation.py.interpolation import LaGrange, Spline1, Spline3
 from utils.utils import get_accuracy
 
 
@@ -21,9 +21,9 @@ class TestInterpolation:
             return np.sort(1 / 2 * ((b - a) * np.cos(np.pi * (np.arange(n_nodes) + 1 / 2) / n_nodes) + (b + a)))
         raise ValueError(f'Unknown node type {nodes_type}')
 
-    def _test_case(self, fname, func: callable, a, b, n_nodes):
+    def _test_case(self, fname, func: callable, a, b, n_nodes, interp_params):
         """
-        Проверяем многочлен/сплайн при разном выборе точек (EQ/CHEB)
+        Общий метод проверки
         """
         k_dense = 10
         m = k_dense * n_nodes
@@ -36,14 +36,6 @@ class TestInterpolation:
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 6))
         ax1.plot(xs_dense, ys_dense, 'k-', label='exact')
-
-        interp_params = [
-            # color, interp_name, nodes_type, label
-            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
-            ['r', LaGrange, NodeType.CHEB, 'LaGrange-cheb'],
-            ['c', Spline3,  NodeType.EQ,   'Spline-eq'],
-            ['m', Spline3,  NodeType.CHEB, 'Spline-cheb'],
-        ]
 
         for (color, interp_name, nodes_type, label) in interp_params:
             xs = self._get_nodes(nodes_type, a, b, n_nodes)
@@ -67,16 +59,43 @@ class TestInterpolation:
     @pytest.mark.parametrize('fname, func',
                              [
                                  ['exp(sin(x))', lambda x: np.exp(np.sin(x))],
-                                 ['cos(exp(x))', lambda x: np.cos(np.exp(x))],
                                  ['x^4', lambda x: x**4],
                              ])
-    def test_interpolation(self, fname, func):
+    def test_equidistant(self, fname, func):
         """
-        Простые случаи
+        Интерполяция с равноотстоящими узлами
         """
         n_nodes = 15
         a, b = -1, 1
-        self._test_case(fname, func, a, b, n_nodes)
+        interp_params = [
+            # color, interp_name, nodes_type, label
+            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
+            ['g', Spline1,  NodeType.EQ,   'Spline1-eq'],
+            ['c', Spline3,  NodeType.EQ,   'Spline3-eq'],
+        ]
+
+        self._test_case(fname, func, a, b, n_nodes, interp_params)
+
+    @pytest.mark.parametrize('fname, func',
+                             [
+                                 ['exp(sin(x))', lambda x: np.exp(np.sin(x))],
+                                 ['cos(exp(x))', lambda x: np.cos(np.exp(x))],
+                             ])
+    def test_chebyshev(self, fname, func):
+        """
+        Интерполяция с узлами Чебышёва
+        """
+        n_nodes = 15
+        a, b = -1, 1
+        interp_params = [
+            # color, interp_name, nodes_type, label
+            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
+            ['r', LaGrange, NodeType.CHEB, 'LaGrange-cheb'],
+            ['g', Spline1,  NodeType.CHEB, 'Linear-cheb'],
+            ['c', Spline3,  NodeType.EQ,   'Cubic-eq'],
+        ]
+
+        self._test_case(fname, func, a, b, n_nodes, interp_params)
 
     def test_runge(self):
         """
@@ -85,5 +104,11 @@ class TestInterpolation:
         func = lambda x: 1 / (1 + x**2)
         n_nodes = 15
         a, b = -5, 5
+        interp_params = [
+            # color, interp_name, nodes_type, label
+            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
+            ['r', LaGrange, NodeType.CHEB, 'LaGrange-cheb'],
+            ['c', Spline3,  NodeType.EQ,   'Cubic-eq'],
+        ]
 
-        self._test_case('1 / (1 + x**2)', func, a, b, n_nodes)
+        self._test_case('1 / (1 + x**2)', func, a, b, n_nodes, interp_params)

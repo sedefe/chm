@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import interp1d
 
 
 class Interpolation:
@@ -35,16 +35,31 @@ class LaGrange(Interpolation):
         return np.polyval(self.poly, xs)
 
 
+class Spline1(Interpolation):
+    """
+    Ломаная
+    """
+    def __init__(self, xs, ys):
+        """
+        Метод инициализации не должен использовать scipy.interpolate.interp1d()
+        """
+        super().__init__(xs, ys)
+        self.interp = interp1d(xs, ys, kind='linear', fill_value='extrapolate')
+
+    def __call__(self, xs):
+        return self.interp(xs)
+
+
 class Spline3(Interpolation):
     """
     Кубический сплайн
     """
     def __init__(self, xs, ys):
         """
-        Метод инициализации не должен использовать класс CubicSpline
+        Метод инициализации не должен использовать scipy.interpolate.interp1d()
         """
         super().__init__(xs, ys)
-        self.spline = CubicSpline(xs, ys)
+        self.interp = interp1d(xs, ys, kind='cubic', fill_value='extrapolate')
 
     def __call__(self, xs):
-        return self.spline(xs)
+        return self.interp(xs)
