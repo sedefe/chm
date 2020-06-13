@@ -2,39 +2,88 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
-from S2T3_approximation.py import approximation
+from S2T3_approximation.py.approximation import Algebraic, Legendre, Harmonic
 from utils.utils import get_accuracy
 
 
-def test_approximation():
-    n = 5
-    dim = 3
+@pytest.mark.parametrize('fname, func', [
+    ['tg(x) + sin(x)', lambda x: np.tan(x) + np.sin(x)],
+    ['|x| - cos(pi*x)', lambda x: np.abs(x) - np.cos(np.pi*x)],
+    ['x**2 - 2', lambda x: x**2 - 2],
+    ['strobe', lambda x: (np.abs(x) < 1/2).astype(float)],
+])
+def test_polynomial(fname, func: callable):
+    """
+    Сравниваем аппроксимацию алгебраическими многочленами и многочленами Лежандра
+    """
+    n = 15
+    dim = 5
     m = 101
 
-    x0 = np.linspace(-1, 1, n)
-    x1 = np.linspace(-1, 1, m)
+    xs0 = np.linspace(-1, 1, n)
+    xs1 = np.linspace(-1, 1, m)
 
-    y0 = approximation.func(x0)
-    y1 = approximation.func(x1)
+    ys0 = func(xs0)
+    ys1 = func(xs1)
 
-    y_algpoly, _, p_algpoly = approximation.approx(x0, y0, x1, approximation.ApproxType.algebraic, dim)
-    assert(len(p_algpoly) == dim), f'polynome length should be {dim}'
-    assert(all(abs(y1 - y_algpoly) < 1)), 'algebraic polynome approximation is too bad'
-
-    y_legpoly, _, p_legpoly = approximation.approx(x0, y0, x1, approximation.ApproxType.legendre, dim)
-    assert(len(p_legpoly) == dim), f'polynome length should be {dim}'
-    assert(all(abs(y1 - y_legpoly) < 1)), 'legendre polynome approximation is too bad'
-    # assert(all(abs(p_algpoly - p_legpoly) < 1e-3))
-
+    colors = 'bg'
     fig, (ax1, ax2) = plt.subplots(1, 2)
-    ax1.set_title('y(x)')
-    ax1.plot(x1, y1, 'ko', label='exact')
-    ax1.plot(x1, y_algpoly, 'b.:', label='algebraic')
-    ax1.plot(x1, y_legpoly, 'g.:', label='legendre')
-    ax1.legend()
-
+    ax1.set_title(f'{fname}')
     ax2.set_title('accuracy')
-    ax2.plot(x1, get_accuracy(y1, - y_algpoly), 'b.:', label='algebraic')
-    ax2.plot(x1, get_accuracy(y1, - y_legpoly), 'g.:', label='legendre')
+    ax1.plot(xs1, ys1, 'k-', label='exact')
+    ax1.plot(xs0, ys0, 'k.')
+
+    polynomes = []
+    for color, approx_type in zip(colors, [Algebraic, Legendre]):
+        approx = approx_type(xs0, ys0, dim)
+        ys1_num = approx(xs1)
+        polynomes.append(approx.get_poly())
+
+        ax1.plot(xs1, ys1_num, f'{color}-', label=approx.name)
+        ax2.plot(xs1, get_accuracy(ys1, ys1_num), f'{color}-', label=approx.name)
+
+        assert(len(approx.get_poly()) == dim), f'{approx_type} polynome length should be {dim}'
+        assert(all(abs(ys1 - ys1_num) < 1)), f'{approx_type} polynome approximation is too bad'
+
+    assert(all(abs(polynomes[0] - polynomes[1]) < 1e-3))
+
+    ax1.legend()
+    ax2.legend()
+    plt.show()
+
+
+@pytest.mark.parametrize('fname, func', [
+    ['sin(2pi*x) - cos(pi*x)', lambda x: np.sin(2*np.pi*x) - np.cos(np.pi*x)],
+    ['strobe', lambda x: (np.abs(x) < 1/2).astype(float)],
+])
+def test_harmonic(fname, func: callable):
+    """
+    Сравниваем аппроксимацию алгебраическими многочленами и гармониками
+    """
+    n = 51
+    dim = 21
+    m = 101
+
+    xs0 = np.linspace(-1, 1, n)
+    xs1 = np.linspace(-1, 1, m)
+
+    ys0 = func(xs0)
+    ys1 = func(xs1)
+
+    colors = 'br'
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    ax1.set_title(f'{fname}')
+    ax2.set_title('accuracy')
+    ax1.plot(xs1, ys1, 'k-', label='exact')
+    ax1.plot(xs0, ys0, 'k.')
+
+    for color, approx_type in zip(colors, [Algebraic, Harmonic]):
+        approx = approx_type(xs0, ys0, dim)
+        ys1_num = approx(xs1)
+
+        ax1.plot(xs1, ys1_num, f'{color}-', label=approx.name)
+        ax2.plot(xs1, get_accuracy(ys1, ys1_num), f'{color}-', label=approx.name)
+
+    ax1.legend()
     ax2.legend()
     plt.show()

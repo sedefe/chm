@@ -37,13 +37,14 @@ class TestInterpolation:
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 6))
         ax1.plot(xs_dense, ys_dense, 'k-', label='exact')
 
-        for (color, interp_name, nodes_type, label) in interp_params:
+        for (color, interp_name, nodes_type) in interp_params:
             xs = self._get_nodes(nodes_type, a, b, n_nodes)
             ys = func(xs)
 
             interp = interp_name(xs, ys)
             ys_dense_num = interp(xs_dense)
 
+            label = f'{interp.name}-{str(nodes_type.name)}'
             ax1.plot(xs_dense, ys_dense_num, f'{color}:', label=label)
             ax1.plot(xs, ys, f'{color}.')
             ax2.plot(xs_dense, get_accuracy(ys_dense, ys_dense_num), f'{color}-', label=label)
@@ -69,9 +70,9 @@ class TestInterpolation:
         a, b = -1, 1
         interp_params = [
             # color, interp_name, nodes_type, label
-            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
-            ['g', Spline1,  NodeType.EQ,   'Spline1-eq'],
-            ['c', Spline3,  NodeType.EQ,   'Spline3-eq'],
+            ['b', LaGrange, NodeType.EQ],
+            ['g', Spline1,  NodeType.EQ],
+            ['c', Spline3,  NodeType.EQ],
         ]
 
         self._test_case(fname, func, a, b, n_nodes, interp_params)
@@ -88,11 +89,11 @@ class TestInterpolation:
         n_nodes = 15
         a, b = -1, 1
         interp_params = [
-            # color, interp_name, nodes_type, label
-            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
-            ['r', LaGrange, NodeType.CHEB, 'LaGrange-cheb'],
-            ['g', Spline1,  NodeType.CHEB, 'Linear-cheb'],
-            ['c', Spline3,  NodeType.EQ,   'Cubic-eq'],
+            # color, interp_name, nodes_type
+            ['b', LaGrange, NodeType.EQ],
+            ['r', LaGrange, NodeType.CHEB],
+            ['g', Spline1,  NodeType.CHEB],
+            ['c', Spline3,  NodeType.EQ],
         ]
 
         self._test_case(fname, func, a, b, n_nodes, interp_params)
@@ -106,9 +107,9 @@ class TestInterpolation:
         a, b = -5, 5
         interp_params = [
             # color, interp_name, nodes_type, label
-            ['b', LaGrange, NodeType.EQ,   'LaGrange-eq'],
-            ['r', LaGrange, NodeType.CHEB, 'LaGrange-cheb'],
-            ['c', Spline3,  NodeType.EQ,   'Cubic-eq'],
+            ['b', LaGrange, NodeType.EQ],
+            ['r', LaGrange, NodeType.CHEB],
+            ['c', Spline3,  NodeType.EQ],
         ]
 
         self._test_case('1 / (1 + x**2)', func, a, b, n_nodes, interp_params)
