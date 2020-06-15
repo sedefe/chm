@@ -6,11 +6,8 @@ def solve_upper_triang(A, b):
     """
     Решаем Ax=b для верхнетреугольной A
     """
-    A = np.array(A, ndmin=2)
-    b = np.reshape(b, (-1, 1))
     n = len(b)
-
-    Ab = np.concatenate((A, b), axis=1)
+    Ab = np.c_[A, b]
 
     for i in range(n)[::-1]:
         Ab[i, :] /= Ab[i, i]
@@ -59,5 +56,4 @@ def solve_qr(A, b):
     Решаем Ax=b с помощью QR разложения
     """
     Q, R = qr(A)
-    b = np.reshape(b, (-1, 1))
     return solve_upper_triang(R, Q.T @ b)

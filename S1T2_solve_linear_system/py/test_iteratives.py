@@ -24,7 +24,7 @@ def test_iteratives(tol, check):
         [1, 1, n + 6],
     ], dtype='float64')
 
-    b = np.array([n + 4, n + 6, n + 8], dtype='float64')
+    b = np.array([n + 4, n + 6, n + 8], dtype='float64') * np.pi
 
     methods = [richardson, jacobi, seidel]
     colors = 'mgb'
