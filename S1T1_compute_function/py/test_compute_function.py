@@ -1,4 +1,5 @@
 import pytest
+import pytest_timeout  # пакет должен стоять, чтобы работал декоратор pytest.mark.timeout()
 import numpy as np
 import sympy as sp
 from sympy.abc import x
@@ -17,7 +18,7 @@ from S1T1_compute_function.py import compute_function as cf
                              sp.cosh,
                          ]
                          )
-@pytest.mark.parametrize('tol', 10. ** np.array(range(-1, -10, -1)))
+@pytest.mark.parametrize('tol', 10. ** np.arange(-1, -10, -1))
 @pytest.mark.timeout(1)
 def test_elementaries(func, tol):
     """
