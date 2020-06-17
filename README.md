@@ -37,6 +37,11 @@ You should write the code that solves the problem and is verified by test script
 6. Set pytest as a Default test runner (`File`->`Settings`->`Tools`->`Python Integrated Tools`).
 7. Choose any `test_*.py` file and press green `Run ...` button at any `def test_*():` row.
 
+## Viewing notebooks online
+Github has issues with showing notebooks. You may use https://nbviewer.jupyter.org/ instead and paste the link to `.ipynb` file there.
+
+For example, https://nbviewer.jupyter.org/github/sedefe/chm/blob/master/S2T2_interpolation/notebooks/hermite-interpolation.ipynb
+
 ## Contacts
 Feel free to ask:
 * sagoyewatha@mail.ru
