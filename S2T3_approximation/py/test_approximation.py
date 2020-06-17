@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import numpy.polynomial as P
 import matplotlib.pyplot as plt
 
 from S2T3_approximation.py.approximation import Algebraic, Legendre, Harmonic
@@ -33,19 +34,21 @@ def test_polynomial(fname, func: callable):
     ax1.plot(xs1, ys1, 'k-', label='exact')
     ax1.plot(xs0, ys0, 'k.')
 
-    polynomes = []
+    coeffs = []
     for color, approx_type in zip(colors, [Algebraic, Legendre]):
         approx = approx_type(xs0, ys0, dim)
         ys1_num = approx(xs1)
-        polynomes.append(approx.get_poly())
+        coeffs.append(approx.coeffs)
 
         ax1.plot(xs1, ys1_num, f'{color}-', label=approx.name)
         ax2.plot(xs1, get_accuracy(ys1, ys1_num), f'{color}-', label=approx.name)
 
-        assert(len(approx.get_poly()) == dim), f'{approx_type} polynome length should be {dim}'
+        assert(len(approx.coeffs) == dim), f'{approx_type} polynome length should be {dim}'
         assert(all(abs(ys1 - ys1_num) < 1)), f'{approx_type} polynome approximation is too bad'
 
-    assert(all(abs(polynomes[0] - polynomes[1]) < 1e-3))
+    alg_poly = coeffs[0]
+    leg_poly = P.legendre.leg2poly(coeffs[1])
+    assert(all(abs(alg_poly - leg_poly) < 1e-3)), 'algebraic and legendre are not consistent'
 
     ax1.legend()
     ax2.legend()

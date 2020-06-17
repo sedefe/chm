@@ -1,67 +1,57 @@
 import numpy as np
-from enum import Enum, auto
+from scipy.special import legendre
 
 
 class Approximation:
     """
     Аппроксимация по МНК на интервале [-1; 1]
-    Нужно по значениям ys0 в точках xs0 выдать значения в точках xs1
+    Нужно построить аппроксимацию в заданном семействе по значениям ys в точках xs
+    В атрибуте coeffs должен лежать вектор коэффициентов
     :param dim: размерность семейства функций, которыми мы аппроксимируем
-    :return ys1: значения в точках xs1
-    :return a: (для ApproxType.algebraic и ApproxType.legendre) вектор коэффициентов длины dim
-    :return poly: (для ApproxType.algebraic и ApproxType.legendre) коэффициенты аппроксимационного многочлена p
     """
-
-    def __init__(self, xs, ys, dim):
+    def __init__(self, name, xs, ys, dim):
         """
         Метод инициализации
         """
-        self.name = 'default approximation'
+        self.name = name
         self.dim = dim
         self.xs = xs
         self.ys = ys
+        self.coeffs = None
 
     def __call__(self, xs):
         """
-        Метод вызова
+        Метод вызова: выдать значения в точках xs
         """
         raise NotImplementedError
 
 
 class Algebraic(Approximation):
     """
-    Аппроксимация семейством алгебраических полиномов (1, x, x^2, ...)
+    Аппроксимация семейством алгебраических многочленов (1, x, x^2, ...)
     Метод инициализации не должен использовать numpy.polyfit()
     """
     def __init__(self, xs, ys, dim):
-        super().__init__(xs, ys, dim)
-        self.name = 'algebraic'
-        self.poly = np.polyfit(xs, ys, deg=dim-1)
+        super().__init__('algebraic', xs, ys, dim)
+        self.coeffs = np.flip(np.polyfit(xs, ys, deg=dim-1))
 
     def __call__(self, xs):
-        ys = np.polyval(self.poly, xs)
-        return ys
-
-    def get_poly(self):
-        return self.poly
+        return np.polyval(np.flip(self.coeffs), xs)
 
 
 class Legendre(Approximation):
     """
-    Аппроксимация семейством полиномов Лежандра
-    Метод инициализации не должен использовать numpy.polyfit()
+    Аппроксимация семейством многочлена Лежандра
+    Методы инициализации и вызова не должны использовать класс numpy.polynomial.Legendre
+    Коэффициенты k-го многочлена Лежандра можно получить с помощью scipy.special.legendre(k)
     """
     def __init__(self, xs, ys, dim):
-        super().__init__(xs, ys, dim)
-        self.name = 'legendre'
-        self.poly = np.polyfit(xs, ys, deg=dim-1)
+        super().__init__('legendre', xs, ys, dim)
+        self.leg_poly = np.polynomial.Legendre.fit(xs, ys, deg=dim-1)
+        self.coeffs = self.leg_poly.coef
 
     def __call__(self, xs):
-        ys = np.polyval(self.poly, xs)
-        return ys
-
-    def get_poly(self):
-        return self.poly
+        return self.leg_poly(xs)
 
 
 class Harmonic(Approximation):
@@ -76,8 +66,7 @@ class Harmonic(Approximation):
         assert dim % 2 == 1, 'dimension must be odd'
 
         dim = (dim-1) // 2
-        super().__init__(xs[:-1], ys[:-1], dim)
-        self.name = 'harmonic'
+        super().__init__('harmonic', xs[:-1], ys[:-1], dim)
 
         self.fft = np.fft.fft(self.ys)
 
