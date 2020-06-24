@@ -68,7 +68,8 @@ def test_solve_plane(f, x0, y0):
     assert np.linalg.norm([float(f_eval[0]), float(f_eval[1])]) < tol
 
     # plot f() lines
-    p = sp.plot(show=False, backend=sp.plotting.plot_backends['matplotlib'])
+    # p = sp.plot(show=False, backend=sp.plotting.plot_backends['matplotlib'])
+    p = sp.plot(show=False)
     p.extend(sp.plot_implicit(f[0], depth=1, line_color='k', show=False))
     p.extend(sp.plot_implicit(f[1], depth=1, line_color='k', show=False))
 

@@ -3,4 +3,4 @@ numpy>=1.18.1
 pytest>=5.3.5
 pytest_timeout
 scipy>=1.4.1
-sympy>=1.5.1
+sympy>=1.6
