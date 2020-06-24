@@ -74,7 +74,7 @@ def calc_elem_func(func, x0, eps):
         while True:
             s += u
             k += 1
-            if u < eps:
+            if abs(u) < eps:
                 return s
             u *= x0 / k
 
