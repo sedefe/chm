@@ -46,4 +46,5 @@ For example, https://nbviewer.jupyter.org/github/sedefe/chm/blob/master/S2T2_int
 Feel free to ask:
 * sagoyewatha@mail.ru
 * [Term 1] https://t.me/chm_1sem
+* [Term 2] https://t.me/chm_2sem
 * [Term 3] https://t.me/chm_3sem
