@@ -27,3 +27,11 @@ def mps(A, b, x0, eps):
     :return: list of x, list of y
     """
     return mngs(A, b, x0, eps/2)
+
+
+def newton(A, b, x0, eps):
+    """
+    метод Ньютона для задачи y = 1/2*x.T*A*x + b.T*x (гессиан равен A)
+    :return: list of x, list of y
+    """
+    return mngs(A, b, x0, eps/4)
