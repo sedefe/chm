@@ -58,7 +58,7 @@ def test_quad_degree():
         node_counts = range(1, max_nodes+1)
 
         Y = [quad(p, x0, x1, np.linspace(x0, x1, node_count)) for node_count in node_counts]
-        # Y = [quad(p, x0, x1, x0 + (x1-x0) * np.random.random(node_count)) for node_count in max_node_count]
+        # Y = [quad(p, x0, x1, x0 + (x1-x0) * np.random.random(node_count)) for node_count in node_counts]
         accuracy = get_accuracy(Y, y0 * np.ones_like(Y))
 
         # Проверяем точность
