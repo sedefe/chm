@@ -10,12 +10,16 @@ from utils.utils import get_accuracy
 default_student = 0
 
 
+@pytest.mark.parametrize("eps_y, check_accuracy", [  # допуск
+    [1e-06, True],
+    [1e-16, False],
+])
 @pytest.mark.parametrize("student", [default_student])  # номер варианта
 @pytest.mark.parametrize("n_dim, projection", [  # размерность задачи
     [2, 'rectilinear'],
     [3, '3d'],
 ])
-def test_optimization(student, n_dim, projection):
+def test_optimization(eps_y, check_accuracy, student, n_dim, projection):
     N = student
 
     A = np.array([[4,   1,      1],
@@ -28,8 +32,7 @@ def test_optimization(student, n_dim, projection):
     x1 = np.linalg.solve(A, -b)
     y1 = (1 / 2 * x1.T @ A @ x1 + b.T @ x1).item()
 
-    eps_y = 1e-6
-    eps_x = 1e-3
+    eps_x = np.sqrt(eps_y)
 
     methods = ['mngs', 'mps', 'newton']
     styles = ['go:', 'bo:', 'mo:']
@@ -43,8 +46,9 @@ def test_optimization(student, n_dim, projection):
         xs, ys = getattr(optimization, method)(A, b, x0, eps_y)
 
         assert np.equal(x0, xs[0]).all(), 'xs should start with initial point'
-        assert np.linalg.norm(x1 - xs[-1]) < eps_x, 'last xs should be close enough to the optimum'
-        assert np.linalg.norm(y1 - ys[-1]) < eps_y, 'last ys should be close enough to the optimum'
+        if check_accuracy:
+            assert np.linalg.norm(x1 - xs[-1]) < eps_x, 'last xs should be close enough to the optimum'
+            assert np.linalg.norm(y1 - ys[-1]) < eps_y, 'last ys should be close enough to the optimum'
         assert optimization.func.calls == len(ys), f'function was called {optimization.func.calls} times, ' \
                                                    f'but there is {len(ys)} point in the output'
 

@@ -10,7 +10,7 @@ def func(A, b, x):
     return (1 / 2 * x.T @ A @ x + b.T @ x).item()
 
 
-def mngs(A, b, x0, eps):
+def mngs(A, b, x0, eps, max_iter=100):
     """
     метод наискорейшего градиентного спуска для задачи y = 1/2*x.T*A*x + b.T*x
     :return: list of x, list of y
@@ -21,7 +21,7 @@ def mngs(A, b, x0, eps):
     return X, Y
 
 
-def mps(A, b, x0, eps):
+def mps(A, b, x0, eps, max_iter=100):
     """
     метод покоординатного спуска для задачи y = 1/2*x.T*A*x + b.T*x
     :return: list of x, list of y
@@ -29,7 +29,7 @@ def mps(A, b, x0, eps):
     return mngs(A, b, x0, eps/2)
 
 
-def newton(A, b, x0, eps):
+def newton(A, b, x0, eps, max_iter=100):
     """
     метод Ньютона для задачи y = 1/2*x.T*A*x + b.T*x (гессиан равен A)
     :return: list of x, list of y
