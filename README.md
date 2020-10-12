@@ -30,12 +30,14 @@ You should write the code that solves the problem and is verified by test script
 
 ## 7 steps to start from scratch
 1. Install Anaconda with Python>=3.6: https://www.anaconda.com/products/individual
-2. Install PyCharm: https://www.jetbrains.com/ru-ru/pycharm/download
-3. Download and unpack https://github.com/sedefe/chm/archive/master.zip (or `git clone` it if you could).
-4. In Pycharm open the project in main folder (`chm/` or `chm-master/`).
-5. Set the path to Anaconda interpreter: (`File`->`Settings`->`Project`->`Project Interpreter`).
-6. Set pytest as a Default test runner (`File`->`Settings`->`Tools`->`Python Integrated Tools`).
-7. Choose any `test_*.py` file and press green `Run ...` button at any `def test_*():` row.
+1. Install PyCharm: https://www.jetbrains.com/ru-ru/pycharm/download
+1. Get the project in one of these ways:
+   * Download: get https://github.com/sedefe/chm/archive/master.zip and unpack it.
+   * Clone: in Git Bash (https://git-scm.com/downloads) execute `git clone https://github.com/sedefe/chm.git`.
+1. In Pycharm open the project in main folder (`chm/` or `chm-master/`).
+1. Set the path to Anaconda interpreter: (`File`->`Settings`->`Project`->`Project Interpreter`).
+1. Set pytest as a Default test runner (`File`->`Settings`->`Tools`->`Python Integrated Tools`).
+1. Choose any `test_*.py` file and press green `Run ...` button at any `def test_*():` row.
 
 ## Viewing notebooks online
 Github has issues with showing notebooks. You may use https://nbviewer.jupyter.org/ instead and paste the link to `.ipynb` file there.
