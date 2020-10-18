@@ -42,6 +42,12 @@ class TestInterpolation:
             ys = func(xs)
 
             interp = interp_name(xs, ys)
+
+            # проверяем, что попали в узлы интерполяции
+            ys_num = interp(xs)
+            assert (np.abs(ys - ys_num) < 1e-6).all()
+
+            # смотрим, как у нас дела в остальных точках интервала
             ys_dense_num = interp(xs_dense)
 
             label = f'{interp.name}-{str(nodes_type.name)}'
