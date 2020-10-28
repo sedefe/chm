@@ -63,9 +63,9 @@ def test_harmonic(fname, func: callable):
     """
     Сравниваем аппроксимацию алгебраическими многочленами и гармониками
     """
-    n = 51
+    n = 50
     dim = 21
-    m = 101
+    m = 99
 
     xs0 = np.linspace(-1, 1, n)
     xs1 = np.linspace(-1, 1, m)

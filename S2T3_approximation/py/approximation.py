@@ -63,6 +63,7 @@ class Harmonic(Approximation):
     """
     def __init__(self, xs, ys, dim):
         assert abs(ys[0] - ys[-1]) < 1e-6, 'not periodic function'
+        assert len(xs) % 2 == 0, 'len(xs) must be even'
         assert dim % 2 == 1, 'dimension must be odd'
 
         dim = (dim-1) // 2
@@ -72,9 +73,11 @@ class Harmonic(Approximation):
 
     def __call__(self, xs):
         n = len(self.xs)
-        ys1 = np.zeros_like(xs) + self.fft[0] / n
-        for k in range(1, self.dim+1):
-            ys1 += -np.exp(-1j * np.pi * k * xs) * self.fft[k] / (n/2)
-        ys1 = ys1.real
+        ys = np.zeros_like(xs) + self.fft[0] / n
 
-        return ys1
+        for k in range(1, self.dim+1):
+            a = 2/n * self.fft[k] * (-1)**k         # Fourier magic
+            ys += a * np.exp(1j*np.pi * k * xs)     # complex numbers magic
+        ys = ys.real
+
+        return ys
