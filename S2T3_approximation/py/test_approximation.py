@@ -90,3 +90,40 @@ def test_harmonic(fname, func: callable):
     ax1.legend()
     ax2.legend()
     plt.show()
+
+
+@pytest.mark.parametrize('fname, func', [
+    ['strobe', lambda x: (np.abs(x) < 1/2).astype(float)],
+])
+def test_convergence(fname, func: callable):
+    """
+    Сравниваем сходимость
+    """
+    n = 50
+    m = 99
+
+    xs0 = np.linspace(-1, 1, n)
+    xs1 = np.linspace(-1, 1, m)
+
+    ys0 = func(xs0)
+    ys1 = func(xs1)
+
+    colors = 'rgbmc'
+    fig, axs = plt.subplots(1, 2)
+    axs[0].set_title('Algebraic')
+    axs[1].set_title('Harmonic')
+    for ax in axs:
+        ax.plot(xs1, ys1, 'k-', label='exact')
+        ax.plot(xs0, ys0, 'k.')
+
+    for ax, approx_type in zip(axs, [Algebraic, Harmonic]):
+        for color, dim in zip(colors, [1, 11, 21, 31, 41]):
+            approx = approx_type(xs0, ys0, dim)
+            ys1_num = approx(xs1)
+
+            ax.plot(xs1, ys1_num, f'{color}--', label=f'{approx.name} {dim}-d')
+            # ax.plot(xs1, get_accuracy(ys1, ys1_num), f'{color}-', label=f'{approx.name} {dim}-d')
+
+        ax.axis([-1, 1, -0.5, 1.5])
+        ax.legend()
+    plt.show()

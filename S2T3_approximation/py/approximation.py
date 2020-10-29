@@ -58,12 +58,11 @@ class Harmonic(Approximation):
     """
     Аппроксимация семейством гармоник
     Вид семейства описан здесь: https://ru.wikipedia.org/wiki/Тригонометрический_ряд_Фурье
-    Метод инициализации не должен использовать numpy.fft.fft()
-    Метод вызова не должен использовать numpy.exp()
+    Метод инициализации не должен использовать вычисление ДПФ
+    dim всегда нечётное (общее количество синусов и косинусов + константное слагаемое)
     """
     def __init__(self, xs, ys, dim):
         assert abs(ys[0] - ys[-1]) < 1e-6, 'not periodic function'
-        assert len(xs) % 2 == 0, 'len(xs) must be even'
         assert dim % 2 == 1, 'dimension must be odd'
 
         dim = (dim-1) // 2
