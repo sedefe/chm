@@ -43,7 +43,7 @@ def test_optimization(eps_y, check_accuracy, student, n_dim, projection):
 
     for i, method in enumerate(methods):
         optimization.func.calls = 0
-        xs, ys = getattr(optimization, method)(A, b, x0, eps_y)
+        xs, ys = getattr(optimization, method)(A=A, b=b, x0=x0, eps=eps_y, max_iter=30)
 
         assert np.equal(x0, xs[0]).all(), 'xs should start with initial point'
         if check_accuracy:
