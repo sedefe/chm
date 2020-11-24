@@ -8,7 +8,7 @@ from utils.utils import get_accuracy
 
 
 @pytest.mark.parametrize('fname, func', [
-    ['tg(x) + sin(x)', lambda x: np.tan(x) + np.sin(x)],
+    ['exp(x) - exp(-x)', lambda x: np.exp(x) - np.exp(-x)],
     ['|x| - cos(pi*x)', lambda x: np.abs(x) - np.cos(np.pi*x)],
     ['x**2 - 2', lambda x: x**2 - 2],
     ['strobe', lambda x: (np.abs(x) < 1/2).astype(float)],
@@ -17,6 +17,7 @@ def test_polynomial(fname, func: callable):
     """
     Сравниваем аппроксимацию алгебраическими многочленами и многочленами Лежандра
     """
+    np.set_printoptions(linewidth=200, precision=3, suppress=True)
     n = 15
     dim = 5
     m = 101
@@ -48,6 +49,9 @@ def test_polynomial(fname, func: callable):
 
     alg_poly = coeffs[0]
     leg_poly = P.legendre.leg2poly(coeffs[1])
+    print()
+    print(f'alg_poly coeffs: {alg_poly}')
+    print(f'leg_poly coeffs: {leg_poly}')
     assert(all(abs(alg_poly - leg_poly) < 1e-3)), 'algebraic and legendre are not consistent'
 
     ax1.legend()
