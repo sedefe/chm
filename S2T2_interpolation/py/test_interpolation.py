@@ -119,3 +119,55 @@ class TestInterpolation:
         ]
 
         self._test_case('1 / (1 + x**2)', func, a, b, n_nodes, interp_params)
+
+    def test_convergence(self):
+        """
+        Проверка сходимости
+        """
+        func = np.abs
+        a, b = -5, 5
+
+        interp_params = [
+            # color, interp_name, nodes_type, label
+            ['b', LaGrange, NodeType.EQ],
+            ['r', LaGrange, NodeType.CHEB],
+            ['c', Spline3,  NodeType.EQ],
+        ]
+
+        node_params = [
+            # n_nodes, style
+            [5, '-'],
+            [17, '--'],
+            [65, ':'],
+            # [257, '-.'],
+        ]
+
+        # точки, в которых будем сравнивать с точным значением
+        m = 1025
+        xs_dense = np.linspace(a, b, m)
+        ys_dense = func(xs_dense)
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 6))
+        ax1.plot(xs_dense, ys_dense, 'k-', label='exact')
+
+        for (color, interp_name, nodes_type) in interp_params:
+            for (n_nodes, style) in node_params:
+                xs = self._get_nodes(nodes_type, a, b, n_nodes)
+                ys = func(xs)
+
+                interp = interp_name(xs, ys)
+                ys_dense_num = interp(xs_dense)
+
+                label = f'{interp.name}-{str(nodes_type.name)}-{n_nodes}'
+                ax1.plot(xs_dense, ys_dense_num, f'{color}{style}', label=label)
+                ax1.plot(xs, ys, f'{color}.')
+                ax2.plot(xs_dense, get_accuracy(ys_dense, ys_dense_num), f'{color}{style}', label=label)
+
+        ax1.set_title(f'y(x)')
+        ax1.axis([a, b, -1, 6])
+        ax1.legend()
+
+        ax2.set_title('accuracy')
+        ax2.legend()
+
+        plt.show()

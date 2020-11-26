@@ -43,7 +43,7 @@ class Legendre(Approximation):
     """
     Аппроксимация семейством многочлена Лежандра
     Методы инициализации и вызова не должны использовать класс numpy.polynomial.Legendre
-    Коэффициенты k-го многочлена Лежандра можно получить с помощью scipy.special.legendre(k)
+    Коэффициенты многочленов Лежандра нужно получать без использования scipy.special.legendre
     """
     def __init__(self, xs, ys, dim):
         super().__init__('legendre', xs, ys, dim)
