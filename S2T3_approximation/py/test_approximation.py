@@ -49,6 +49,8 @@ def test_polynomial(fname, func: callable):
 
     alg_poly = coeffs[0]
     leg_poly = P.legendre.leg2poly(coeffs[1])
+    leg_poly = np.append(leg_poly, np.zeros(dim - len(leg_poly)))   # leg2poly may decrease dimension
+
     print()
     print(f'alg_poly coeffs: {alg_poly}')
     print(f'leg_poly coeffs: {leg_poly}')
