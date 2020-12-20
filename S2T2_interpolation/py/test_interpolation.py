@@ -99,7 +99,6 @@ class TestInterpolation:
             ['b', LaGrange, NodeType.EQ],
             ['r', LaGrange, NodeType.CHEB],
             ['g', Spline1,  NodeType.CHEB],
-            ['c', Spline3,  NodeType.EQ],
         ]
 
         self._test_case(fname, func, a, b, n_nodes, interp_params)
