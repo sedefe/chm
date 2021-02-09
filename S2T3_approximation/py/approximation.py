@@ -4,10 +4,13 @@ from scipy.special import legendre
 
 class Approximation:
     """
-    Аппроксимация по МНК на интервале [-1; 1]
-    Нужно построить аппроксимацию в заданном семействе по значениям ys в точках xs
+    Абстрактный класс для приближения по МНК на интервале [-1; 1]
+
     В атрибуте coeffs должен лежать вектор коэффициентов
-    :param dim: размерность семейства функций, которыми мы аппроксимируем
+
+    :param xs:  узлы аппроксимации
+    :param ys:  значения в узлах
+    :param dim: размерность семейства функций, которыми мы приближаем
     """
     def __init__(self, name, xs, ys, dim):
         """
@@ -28,8 +31,9 @@ class Approximation:
 
 class Algebraic(Approximation):
     """
-    Аппроксимация семейством алгебраических многочленов (1, x, x^2, ...)
-    Метод инициализации не должен использовать numpy.polyfit()
+    Аппроксимация семейством многочленов (1, x, x^2, ...)
+
+    REQ: Метод инициализации не должен использовать numpy.polyfit()
     """
     def __init__(self, xs, ys, dim):
         super().__init__('algebraic', xs, ys, dim)
@@ -42,8 +46,11 @@ class Algebraic(Approximation):
 class Legendre(Approximation):
     """
     Аппроксимация семейством многочлена Лежандра
-    Методы инициализации и вызова не должны использовать класс numpy.polynomial.Legendre
-    Коэффициенты многочленов Лежандра нужно получать без использования scipy.special.legendre
+
+    Вид семейства описан здесь: https://ru.wikipedia.org/wiki/Многочлены_Лежандра
+
+    REQ: Методы инициализации и вызова не должны использовать класс numpy.polynomial.Legendre
+    REQ: Коэффициенты многочленов Лежандра нужно получать без использования scipy.special.legendre
     """
     def __init__(self, xs, ys, dim):
         super().__init__('legendre', xs, ys, dim)
@@ -57,9 +64,13 @@ class Legendre(Approximation):
 class Harmonic(Approximation):
     """
     Аппроксимация семейством гармоник
+    https://www.moviequotedb.com/movies/transformers-2007/quote_24403.html
+
     Вид семейства описан здесь: https://ru.wikipedia.org/wiki/Тригонометрический_ряд_Фурье
-    Метод инициализации не должен использовать вычисление ДПФ
     dim всегда нечётное (общее количество синусов и косинусов + константное слагаемое)
+
+    REQ: Все гармоники должны иметь целое число периодов на интервале [-1; 1]
+    REQ: Метод инициализации не должен использовать вычисление ДПФ
     """
     def __init__(self, xs, ys, dim):
         assert abs(ys[0] - ys[-1]) < 1e-6, 'not periodic function'

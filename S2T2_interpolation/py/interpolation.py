@@ -3,6 +3,12 @@ from scipy.interpolate import interp1d
 
 
 class Interpolation:
+    """
+    Абстрактный класс для интерполяции
+
+    :param xs: узлы интерполяции
+    :param ys: значения в узлах
+    """
     def __init__(self, xs, ys):
         """
         Метод инициализации
@@ -20,9 +26,10 @@ class Interpolation:
 
 class LaGrange(Interpolation):
     """
-    Интерполяционный полином https://www.youtube.com/watch?v=Vppbdf-qtGU
-    Метод инициализации не должен использовать numpy.polyfit()
-    Метод вызова должен возвращать значения в точках xs, не используя numpy.polyval()
+    Интерполяция полиномом https://www.youtube.com/watch?v=Vppbdf-qtGU
+
+    REQ: Метод инициализации не должен использовать numpy.polyfit
+    REQ: Метод вызова должен возвращать значения в точках xs, не используя numpy.polyval
     """
     def __init__(self, xs, ys):
         super().__init__(xs, ys)
@@ -35,8 +42,9 @@ class LaGrange(Interpolation):
 
 class Spline1(Interpolation):
     """
-    Ломаная
-    Метод инициализации не должен использовать scipy.interpolate.interp1d()
+    Интерполяция ломаной
+
+    REQ: Метод инициализации не должен использовать scipy.interpolate.interp1d
     """
     def __init__(self, xs, ys):
         super().__init__(xs, ys)
@@ -49,8 +57,9 @@ class Spline1(Interpolation):
 
 class Spline3(Interpolation):
     """
-    Кубический сплайн
-    Метод инициализации не должен использовать scipy.interpolate.interp1d()
+    Интерполяция кубическим сплайном
+
+    REQ: Метод инициализации не должен использовать scipy.interpolate.interp1d
     """
     def __init__(self, xs, ys):
         super().__init__(xs, ys)
