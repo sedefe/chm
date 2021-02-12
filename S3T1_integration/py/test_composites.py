@@ -30,7 +30,7 @@ def test_composite_quad(n_nodes):
         accuracy = get_accuracy(Y, p[x0, x1] * np.ones_like(Y))
         x = np.log10(n_intervals)
 
-        # Оценка сходимости
+        # оценка сходимости
         ind = np.isfinite(x) & np.isfinite(accuracy)
         k, b = np.polyfit(x[ind], accuracy[ind], 1)
         aitken_degree = aitken(*Y[0:6:2], L ** 2)
@@ -78,7 +78,7 @@ def test_composite_quad_degree(v):
 
     fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    # plot weights
+    # график весовой функции
     xs = np.linspace(x0, x1, n_intervals[-1]+1)
     ys = 1 / ((xs-a)**alpha * (b-xs)**beta)
 
@@ -90,7 +90,7 @@ def test_composite_quad_degree(v):
     ax1.set_ylabel('p(x)')
     ax1.legend()
 
-    # plot acc
+    # график точности
     ax2.plot(x, accuracy, 'kh')
     ax2.plot(x, a1*x+a0, 'b:', label=f'{a1:.2f}*x+{a0:.2f}')
     ax2.set_xlabel('log10(n_intervals)')

@@ -11,7 +11,7 @@ class AdaptType(enum.Enum):
 
 def fix_step_integration(method: OneStepMethod, func, y_start, ts):
     """
-    Выполняем интегрирование одношаговм метдом с фиксированным шагом
+    Выполняем интегрирование одношаговым метдом с фиксированным шагом
     ts: набор значений t
     returns: list of t, list of y
     """

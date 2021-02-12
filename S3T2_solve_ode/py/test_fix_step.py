@@ -23,10 +23,10 @@ def test_one_step():
     t1 = np.pi/2
     dt = 0.1
 
-    f = Harmonic(y0, 1, 1)
+    ode = Harmonic(y0, 1, 1)
     ts = np.arange(t0, t1+dt, dt)
 
-    exact = f[ts].T
+    exact = ode[ts].T
     _, (ax1, ax2) = plt.subplots(1, 2)
     ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
 
@@ -39,9 +39,9 @@ def test_one_step():
                 RungeKuttaMethod(collection.dopri_coeffs),
             ]
     ):
-        f.clear_call_counter()
-        _, y = fix_step_integration(method, f, y0, ts)
-        n_calls = f.get_call_counter()
+        ode.clear_call_counter()
+        _, y = fix_step_integration(method, ode, y0, ts)
+        n_calls = ode.get_call_counter()
         print(f'One-step {method.name}: {len(y)-1} steps, {n_calls} function calls')
 
         ax1.plot(ts,

@@ -5,6 +5,9 @@ def moments(max_s, xl, xr, a=None, b=None, alpha=0.0, beta=0.0):
     """
     Вычисляем моменты весовой функции с 0-го по max_s-ый на интервале [xl, xr]
     Весовая функция: p(x) = 1 / (x-a)^alpha / (b-x)^beta
+
+    :param max_s:   номер последнего момента
+    :return:        список значений моментов
     """
     assert alpha * beta == 0, f'alpha ({alpha}) and/or beta ({beta}) must be 0'
     if alpha != 0.0:
@@ -22,8 +25,9 @@ def runge(s0, s1, m, L):
     """
     Оценка погрешности последовательных приближений s0 и s1 по правилу Рунге
 
-    :param m: порядок погрешности
-    :param L: кратность шага
+    :param m:   порядок погрешности
+    :param L:   кратность шага
+    :return:    оценки погрешностей s0 и s1
     """
     d0 = np.abs(s1 - s0) / (1 - L ** -m)
     d1 = np.abs(s1 - s0) / (L ** m - 1)
@@ -34,7 +38,8 @@ def aitken(s0, s1, s2, L):
     """
     Оценка погрешности последовательных приближений s0, s1 и s2 по правилу Эйткена
 
-    :param L: кратность шага
+    :param L:   кратность шага
+    :return:    оценки погрешностей s0, s1 и s2
     """
     raise NotImplementedError
 
@@ -47,6 +52,7 @@ def quad(func, x0, x1, xs, **kwargs):
     :param x0, x1:  интервал
     :param xs:      узлы
     :param kwargs:  параметры весовой функции (должны передаваться в moments)
+    :return:        значение ИКФ
     """
     raise NotImplementedError
 
@@ -59,6 +65,7 @@ def quad_gauss(func, x0, x1, n, **kwargs):
     :param x0, x1:  интервал
     :param n:       количество узлов
     :param kwargs:  параметры весовой функции (должны передаваться в moments)
+    :return:        значение ИКФ
     """
     raise NotImplementedError
 
@@ -71,18 +78,21 @@ def composite_quad(func, x0, x1, n_intervals, n_nodes, **kwargs):
     :param x0, x1:      интервал
     :param n_intervals: количество интервалов
     :param n_nodes:     количество узлов на каждом интервале
+    :param kwargs:      параметры весовой функции (должны передаваться в moments)
+    :return:            значение СКФ
     """
     raise NotImplementedError
 
 
 def integrate(func, x0, x1, tol):
     """
-    Интегрирование с заданной точностью (error <= tol) на интервале [x0, x1]
+    Интегрирование с заданной точностью (error <= tol)
 
     Оцениваем сходимость по Эйткену, потом оцениваем погрешность по Рунге
 
-    Нужно вернуть:
-        - значение интеграла
-        - оценку погрешности
+    :param func:    интегрируемая функция
+    :param x0, x1:  интервал
+    :param tol:     допуск
+    :return:        значение интеграла, оценка погрешности
     """
     raise NotImplementedError
