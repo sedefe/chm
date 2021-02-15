@@ -13,11 +13,17 @@ from S3T2_solve_ode.py.one_step_methods import (
 import S3T2_solve_ode.py.coeffs_collection as coeffs
 
 
-@pytest.mark.parametrize('f,y0', (
-        (Harmonic(np.array([1., 1.]), 1, 1), np.array([1., 1.])),
-        (HarmExp(), np.exp([1, 0])),
+@pytest.mark.parametrize('ode,y0', (
+        (
+                Harmonic(np.array([1., 1.]), 1, 1),
+                np.array([1., 1.])
+        ),
+        (
+                HarmExp(),
+                np.exp([1, 0])
+        ),
 ))
-def test_adaptive(f, y0):
+def test_adaptive(ode, y0):
     """
     Проверяем алгоритмы выбора шага
     """
@@ -36,12 +42,12 @@ def test_adaptive(f, y0):
     )
 
     for method, adapt_type in methods:
-        f.clear_call_counter()
+        ode.clear_call_counter()
         ts, ys = adaptive_step_integration(method=method,
-                                           func=f, y_start=y0, t_span=(t0, t1),
+                                           ode=ode, y_start=y0, t_span=(t0, t1),
                                            adapt_type=adapt_type,
                                            atol=atol, rtol=rtol)
-        print(f'{method.name} took {f.get_call_counter()} function calls')
+        print(f'{method.name} took {ode.get_call_counter()} function calls')
 
         tss.append(np.array(ts))
         yss.append(ys)
@@ -83,7 +89,7 @@ def test_adaptive_order():
     """
     t0, t1 = 0, 2*np.pi
     y0 = np.array([1., 1.])
-    f = Harmonic(y0, 1, 1)
+    ode = Harmonic(y0, 1, 1)
 
     methods = (
         (ExplicitEulerMethod(),                         AdaptType.RUNGE),
@@ -99,15 +105,15 @@ def test_adaptive_order():
         fcs = []
         errs = []
         for tol in tols:
-            f.clear_call_counter()
+            ode.clear_call_counter()
             ts, ys = adaptive_step_integration(method=method,
-                                               func=f,
+                                               ode=ode,
                                                y_start=y0,
                                                t_span=(t0, t1),
                                                adapt_type=adapt_type,
                                                atol=tol, rtol=tol*1e3)
-            err = np.linalg.norm(ys[-1] - f[t1])
-            fc = f.get_call_counter()
+            err = np.linalg.norm(ys[-1] - ode[t1])
+            fc = ode.get_call_counter()
             print(f'{method.name}: {fc} RHS calls, err = {err:.5f}')
             errs.append(err)
             fcs.append(fc)
@@ -130,9 +136,9 @@ def test_arenstorf():
     https://commons.wikimedia.org/wiki/File:Arenstorf_Orbit.gif
     Q: какие участки траектории наиболее быстрые?
     """
-    problem = Arenstorf()
-    t0, t1 = 0, 1 * problem.t_period
-    y0 = problem.y0
+    ode = Arenstorf()
+    t0, t1 = 0, 1 * ode.t_period
+    y0 = ode.y0
 
     atol = 1e-6
     rtol = 1e-3
@@ -156,7 +162,7 @@ def test_arenstorf():
 
     for method, adapt_type in methods:
         ts, ys = adaptive_step_integration(method=method,
-                                           func=problem,
+                                           ode=ode,
                                            y_start=y0,
                                            t_span=(t0, t1),
                                            adapt_type=adapt_type,

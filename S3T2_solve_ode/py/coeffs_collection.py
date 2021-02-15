@@ -3,10 +3,13 @@ import scipy
 
 
 class RKScheme:
-    """
-    Схема Рунге-Кутты с параметрами (A, b) порядка p
-    """
     def __init__(self, name, A, b, p):
+        """
+        Схема Рунге-Кутты
+
+        :param A, b:    параметры схемы
+        :param p:       порядок
+        """
         self.name = name
         self.A = np.array(A)
         self.b = np.array(b)
@@ -14,24 +17,28 @@ class RKScheme:
 
 
 class EmbeddedRKScheme(RKScheme):
-    """
-    Вложенная схема Рунге-Кутты с параметрами (A, b, e):
-        - p: порядок схемы (A, b)
-        - q: порядок схемы (A, b+e)
-    """
     def __init__(self, name, A, b, e, p, q):
+        """
+        Вложенная схема Рунге-Кутты
+
+        :param A, b, e: параметры схемы
+        :param p:       порядок схемы (A, b)
+        :param q:       порядок схемы (A, b+e)
+        """
         super().__init__(name, A, b, p)
         self.e = np.array(e)
         self.q = q
 
 
 class EmbeddedRosenbrockScheme:
-    """
-    Вложенная схема Розенброка с параметрами (A, G, gamma, b, e):
-        - p: порядок схемы (A, G, gamma, b)
-        - q: порядок схемы (A, G, gamma, b+e)
-    """
     def __init__(self, name, A, G, gamma, b, e, p, q):
+        """
+        Вложенная схема Розенброка
+
+        :param A, G, gamma, b, e:   параметры схемы
+        :param p:                   порядок схемы (A, G, gamma, b)
+        :param q:                   порядок схемы (A, G, gamma, b+e)
+        """
         self.name = name
         self.A = np.array(A)
         self.G = np.array(G)

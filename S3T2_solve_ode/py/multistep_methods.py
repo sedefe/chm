@@ -1,8 +1,10 @@
 import numpy as np
+
+from utils.ode_collection import ODE
 from S3T2_solve_ode.py.one_step_methods import OneStepMethod
 
 
-#  Коэффиенты методов Адамса
+#  Коэффициенты методов Адамса
 adams_coeffs = {
     1: [1],
     2: [-1 / 2, 3 / 2],
@@ -12,11 +14,14 @@ adams_coeffs = {
 }
 
 
-def adams(func, y_start, T, coeffs, one_step_method: OneStepMethod):
+def adams(ode: ODE, y_start, ts, coeffs, one_step_method: OneStepMethod):
     """
-    T: список точек, по которым мы шагаем (шаг постоянный)
-    coeffs: список коэффициентов метода Адамса
-    one_step_method: одношаговый метод для разгона
-    returns: list of t (same as T), list of y
+    Явный метод Адамса
+
+    :param ode, y_start:    параметры задачи Коши
+    :param ts:              список точек, по которым мы шагаем (шаг постоянный)
+    :param coeffs:          список коэффициентов метода
+    :param one_step_method: одношаговый метод для разгона
+    :return:                список значений t (совпадает с ts), список значений y
     """
     raise NotImplementedError

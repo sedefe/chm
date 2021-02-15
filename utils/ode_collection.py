@@ -3,22 +3,26 @@ from utils.utils import call_counter
 
 
 class ODE:
-    """
-    f(t,y) - get Right-Hand Side
-    f.jacobian(t,y) - get RHS's jacobian
-    f[t] - get exact solution
-    """
     def __init__(self, y0):
         self.y0 = y0
 
     @call_counter
     def __call__(self, t, y):
+        """
+        Вычисление правой части СОДУ F(t, y)
+        """
         raise NotImplementedError
 
     def jacobian(self, t, y):
+        """
+        Вычисление якобиана (если нужен) F(t, y)
+        """
         raise NotImplementedError
 
     def __getitem__(self, t):
+        """
+        Вычисление точного решения СОДУ y' = F(t, y)
+        """
         raise NotImplementedError
 
     def get_call_counter(self):
@@ -30,6 +34,7 @@ class ODE:
 
 class Harmonic(ODE):
     """
+    Осциллятор
     y_1' =  a*y_2
     y_2' = -b*y_1
     """
@@ -60,6 +65,7 @@ class Harmonic(ODE):
 
 class HarmExp(ODE):
     """
+    Экспоненты от гармоник
     y_1 = exp(cos(t))
     y_2 = exp(sin(t))
     y_1' = -y_1 * ln(y_2)
@@ -85,6 +91,7 @@ class HarmExp(ODE):
 
 class VanDerPol(ODE):
     """
+    Осциллятор Ван дер Поля
     y_1' = y_2
     y_2' = mu*(1 - y_1^2) * y_2 - y_1
     """
@@ -106,8 +113,8 @@ class VanDerPol(ODE):
 
 class Arenstorf(ODE):
     """
-    Arenstorf orbit
-    a stable periodic orbit between Earth (0,0) and Moon (1,0)
+    Орбита Аренсторфа
+    Периодическая орбита КА в системе Земли (0,0) и Луны (1,0)
     x_1'' = x_1 + 2*x_2' - mu1*(x_1 + mu)/D_1 - mu*(x_1 - mu1)/D_2
     x_2'' = x_2 - 2*x_1' - mu1*(x_2)/D_1 - mu*(x_2)/D_2
     """
