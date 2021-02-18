@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from utils.integrate_collection import Monome, Harmonic
 
 from utils.utils import get_accuracy
-from S3T1_integration.py.integration import (quad_gauss,
+from S3T1_integration.py.integration import (quad,
+                                             quad_gauss,
                                              composite_quad,
                                              integrate,
                                              aitken)
@@ -102,9 +103,9 @@ def test_composite_quad_degree(v):
     plt.show()
 
 
-def test_gauss_vs_cq():
+def test_quad_vs_cq():
     """
-    Проверяем, как работают quad_gauss() и composite_quad() при одинакомом количестве обращений к функции
+    Проверяем, как работают ИКФ и СКФ при одинакомом количестве обращений к функции
     """
     x0, x1 = 0, np.pi/2
 
@@ -112,28 +113,28 @@ def test_gauss_vs_cq():
     y0 = p[x0, x1]
 
     n_nodes = 2
-    Y_gauss = []
-    Y_cquad = []
+    ys_nt_ct = []
+    ys_gauss = []
+    ys_cquad = []
 
-    n_intervals = np.arange(1, 256, 5)
+    n_intervals = 2 ** np.arange(8)
     for n in n_intervals:
         n_evals = n * n_nodes
-        Y_gauss.append(quad_gauss(p, x0, x1, n_evals))
-        Y_cquad.append(composite_quad(p, x0, x1, n, n_nodes))
+        ys_nt_ct.append(quad(p, x0, x1, np.linspace(0, 1, n_evals) * (x1-x0) + x0))
+        ys_gauss.append(quad_gauss(p, x0, x1, n_evals))
+        ys_cquad.append(composite_quad(p, x0, x1, n, n_nodes))
 
-    accuracy_gauss = get_accuracy(Y_gauss, y0 * np.ones_like(Y_gauss))
-    accuracy_gauss[accuracy_gauss > 17] = 17
+    for ys, label in zip((ys_nt_ct, ys_gauss, ys_cquad),
+                         (f'newton-cotes', f'gauss', f'{n_nodes}-node CQ')):
+        acc = get_accuracy(ys, y0 * np.ones_like(ys))
+        acc[acc > 17] = 17
 
-    accuracy_cquad = get_accuracy(Y_cquad, y0 * np.ones_like(Y_cquad))
-    accuracy_cquad[accuracy_cquad > 17] = 17
-
-    plt.plot(np.log10(n_intervals), accuracy_gauss, '.:', label=f'gauss')
-    plt.plot(np.log10(n_intervals), accuracy_cquad, '.:', label=f'2-node CQ')
+        plt.plot(np.log10(n_intervals), acc, '.:', label=label)
 
     plt.legend()
     plt.ylabel('accuracy')
     plt.xlabel('log10(n_evals)')
-    plt.suptitle(f'test gauss vs CQ')
+    plt.suptitle(f'test quad vs composite quad')
     plt.show()
 
 
