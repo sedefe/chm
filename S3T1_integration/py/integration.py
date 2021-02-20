@@ -4,7 +4,10 @@ import numpy as np
 def moments(max_s, xl, xr, a=None, b=None, alpha=0.0, beta=0.0):
     """
     Вычисляем моменты весовой функции с 0-го по max_s-ый на интервале [xl, xr]
-    Весовая функция: p(x) = 1 / (x-a)^alpha / (b-x)^beta
+    Весовая функция: p(x) = 1 / (x-a)^alpha / (b-x)^beta, причём гарантируется, что:
+        1) 0 <= alpha < 1
+        2) 0 <= beta < 1
+        3) alpha * beta = 0
 
     :param max_s:   номер последнего момента
     :return:        список значений моментов
