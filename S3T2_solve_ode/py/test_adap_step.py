@@ -160,6 +160,10 @@ def test_arenstorf():
     fig2.suptitle('Arenstorf orbit: step sizes')
     ax2.set_xlabel('t'), ax2.set_ylabel('dt')
 
+    fig3, ax3 = plt.subplots(num='|f|')
+    fig3.suptitle('Arenstorf orbit: RHS analysis')
+    ax3.set_xlabel('t')
+
     for method, adapt_type in methods:
         ts, ys = adaptive_step_integration(method=method,
                                            ode=ode,
@@ -176,8 +180,12 @@ def test_arenstorf():
                  ':', label=m.name)
         ax2.plot(ts[:-1], ts[1:] - ts[:-1], '.-', label=m.name)
 
+    derivatives = [np.linalg.norm(ode(t, y)) for t, y in zip(ts, ys)]
+    # derivatives = [1/(np.linalg.norm(ode(t, y))) for t, y in zip(ts, ys)]
+
     ax1.plot(0, 0, 'bo', label='Earth')
     ax1.plot(1, 0, '.', color='grey', label='Moon')
+    ax3.plot(ts, derivatives, label='|f(t, y)|')
     ax1.legend()
     ax2.legend()
     plt.show()
