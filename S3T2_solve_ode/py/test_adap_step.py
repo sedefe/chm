@@ -53,7 +53,7 @@ def test_adaptive(ode, y0):
         yss.append(ys)
 
     ts = np.array(sorted([t for ts in tss for t in ts]))
-    exact = f[ts].T
+    exact = ode[ts].T
     y0 = np.array([y[0] for y in exact])
 
     # plots
@@ -73,7 +73,7 @@ def test_adaptive(ode, y0):
     for (m, _), ts, ys in zip(methods, tss, yss):
         ax1.plot(ts, [y[0] for y in ys], '.', label=m.name)
         ax2.plot(ts[:-1], ts[1:] - ts[:-1], '.-', label=m.name)
-        ax3.plot(ts, get_accuracy(f[ts].T, ys), '.-', label=m.name)
+        ax3.plot(ts, get_accuracy(ode[ts].T, ys), '.-', label=m.name)
 
     ax1.legend()
     ax2.legend()
@@ -114,7 +114,7 @@ def test_adaptive_order():
                                                atol=tol, rtol=tol*1e3)
             err = np.linalg.norm(ys[-1] - ode[t1])
             fc = ode.get_call_counter()
-            print(f'{method.name}: {fc} RHS calls, err = {err:.5f}')
+            print(f'{method.name} with {adapt_type.name}: {fc} RHS calls, err = {err:.5f}')
             errs.append(err)
             fcs.append(fc)
 
