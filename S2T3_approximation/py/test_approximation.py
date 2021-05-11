@@ -30,8 +30,6 @@ def test_polynomial(fname, func: callable):
 
     colors = 'bg'
     fig, (ax1, ax2) = plt.subplots(1, 2)
-    ax1.set_title(f'{fname}')
-    ax2.set_title('accuracy')
     ax1.plot(xs1, ys1, 'k-', label='exact')
     ax1.plot(xs0, ys0, 'k.')
 
@@ -56,8 +54,10 @@ def test_polynomial(fname, func: callable):
     print(f'leg_poly coeffs: {leg_poly}')
     assert(all(abs(alg_poly - leg_poly) < 1e-3)), 'algebraic and legendre are not consistent'
 
-    ax1.legend()
-    ax2.legend()
+    ax1.legend(), ax1.set_title(f'y(x)')
+    ax2.legend(), ax2.set_title('accuracy')
+    fig.suptitle(f'{fname}')
+
     plt.show()
 
 
@@ -81,8 +81,6 @@ def test_harmonic(fname, func: callable):
 
     colors = 'br'
     fig, (ax1, ax2) = plt.subplots(1, 2)
-    ax1.set_title(f'{fname}')
-    ax2.set_title('accuracy')
     ax1.plot(xs1, ys1, 'k-', label='exact')
     ax1.plot(xs0, ys0, 'k.')
 
@@ -93,8 +91,10 @@ def test_harmonic(fname, func: callable):
         ax1.plot(xs1, ys1_num, f'{color}-', label=approx.name)
         ax2.plot(xs1, get_accuracy(ys1, ys1_num), f'{color}-', label=approx.name)
 
-    ax1.legend()
-    ax2.legend()
+    ax1.legend(), ax1.set_title(f'y(x)')
+    ax2.legend(), ax2.set_title('accuracy')
+    fig.suptitle(f'{fname}')
+
     plt.show()
 
 
@@ -116,8 +116,7 @@ def test_convergence(fname, func: callable):
 
     colors = 'rgbmc'
     fig, axs = plt.subplots(1, 2)
-    axs[0].set_title('Algebraic')
-    axs[1].set_title('Harmonic')
+
     for ax in axs:
         ax.plot(xs1, ys1, 'k-', label='exact')
         ax.plot(xs0, ys0, 'k.')
@@ -132,4 +131,9 @@ def test_convergence(fname, func: callable):
 
         ax.axis([-1, 1, -0.5, 1.5])
         ax.legend()
+
+    axs[0].legend(), axs[0].set_title('Algebraic')
+    axs[1].legend(), axs[1].set_title('Harmonic')
+    fig.suptitle(f'{fname}')
+
     plt.show()

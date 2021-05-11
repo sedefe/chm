@@ -57,28 +57,21 @@ def test_adaptive(ode, y0):
     y0 = np.array([y[0] for y in exact])
 
     # plots
-    fig1, ax1 = plt.subplots(num='y(t)')
-    fig1.suptitle('test_adaptive: y(t)')
-    ax1.set_xlabel('t'), ax1.set_ylabel('y')
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
+
     ax1.plot(ts, y0, 'ko-', label='exact')
-
-    fig2, ax2 = plt.subplots(num='dt(t)')
-    fig2.suptitle('test_adaptive: step sizes')
-    ax2.set_xlabel('t'), ax2.set_ylabel('dt')
-
-    fig3, ax3 = plt.subplots(num='dy(t)')
-    fig3.suptitle('test_adaptive: accuracies')
-    ax3.set_xlabel('t'), ax3.set_ylabel('accuracy')
 
     for (m, _), ts, ys in zip(methods, tss, yss):
         ax1.plot(ts, [y[0] for y in ys], '.', label=m.name)
-        ax2.plot(ts[:-1], ts[1:] - ts[:-1], '.-', label=m.name)
+        ax2.plot(ts[:-1], np.diff(ts), '.-', label=m.name)
         ax3.plot(ts, get_accuracy(ode[ts].T, ys), '.-', label=m.name)
 
-    ax1.legend()
-    ax2.legend()
-    ax3.legend()
+    ax1.legend(), ax1.set_title('y(t)')
+    ax2.legend(), ax2.set_title('dt(t)')
+    ax3.legend(), ax3.set_title('accuracy')
 
+    fig.suptitle('test_adaptive')
+    fig.tight_layout()
     plt.show()
 
 
@@ -123,10 +116,12 @@ def test_adaptive_order():
         k, b = np.polyfit(x, y, 1)
         plt.plot(x, k*x+b, 'k:')
         plt.plot(x, y, 'p', label=f'{method.name} {adapt_type} ({k:.2f})')
-    plt.suptitle('test_adaptive_order: check RHS evals')
+
+    plt.title('test_adaptive_order: check RHS evals')
     plt.xlabel('log10(function_calls)')
     plt.ylabel('accuracy')
     plt.legend()
+
     plt.show()
 
 
@@ -152,17 +147,7 @@ def test_arenstorf():
         (EmbeddedRungeKuttaMethod(coeffs.dopri_coeffs), AdaptType.EMBEDDED),
     )
 
-    fig1, ax1 = plt.subplots(num='traj')
-    fig1.suptitle('Arenstorf orbit: trajectory')
-    ax1.set_xlabel('x1'), ax1.set_ylabel('x2')
-
-    fig2, ax2 = plt.subplots(num='dt(t)')
-    fig2.suptitle('Arenstorf orbit: step sizes')
-    ax2.set_xlabel('t'), ax2.set_ylabel('dt')
-
-    fig3, ax3 = plt.subplots(num='|f|')
-    fig3.suptitle('Arenstorf orbit: RHS analysis')
-    ax3.set_xlabel('t')
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
 
     for method, adapt_type in methods:
         ts, ys = adaptive_step_integration(method=method,
@@ -178,14 +163,20 @@ def test_arenstorf():
         ax1.plot([y[0] for y in ys],
                  [y[1] for y in ys],
                  ':', label=m.name)
-        ax2.plot(ts[:-1], ts[1:] - ts[:-1], '.-', label=m.name)
+        ax2.plot(ts[:-1], np.diff(ts), '.-', label=m.name)
 
-    derivatives = [np.linalg.norm(ode(t, y)) for t, y in zip(ts, ys)]
+    derivatives = [np.log10(np.linalg.norm(ode(t, y))) for t, y in zip(ts, ys)]
     # derivatives = [1/(np.linalg.norm(ode(t, y))) for t, y in zip(ts, ys)]
 
     ax1.plot(0, 0, 'bo', label='Earth')
     ax1.plot(1, 0, '.', color='grey', label='Moon')
-    ax3.plot(ts, derivatives, label='|f(t, y)|')
-    ax1.legend()
-    ax2.legend()
+    ax3.plot(ts, derivatives, label='log10(|f(t, y)|)')
+
+    ax1.legend(), ax1.set_title('trajectory')
+    ax2.legend(), ax2.set_title('dt(t)')
+    ax3.legend(), ax3.set_title('right-hand side')
+
+    fig.suptitle('Arenstorf orbit')
+    fig.tight_layout()
+
     plt.show()

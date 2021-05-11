@@ -37,7 +37,7 @@ def test_optimization(eps_y, check_accuracy, student, n_dim, projection):
     methods = ['mngs', 'mps', 'newton']
     styles = ['go:', 'bo:', 'mo:']
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(9, 5))
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122, projection=projection)
 
@@ -58,9 +58,13 @@ def test_optimization(eps_y, check_accuracy, student, n_dim, projection):
 
     ax = ax1.axis()
     ax1.plot(ax[:2], -np.log10([eps_y, eps_y]), 'k-')
+
     ax1.set_xlabel('N iter')
     ax1.set_ylabel('accuracy')
     ax1.legend()
     ax2.legend()
+
     fig.suptitle(f'Results for {n_dim}D')
+    fig.tight_layout()
+
     plt.show()

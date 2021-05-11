@@ -39,8 +39,9 @@ def test_iteratives(tol, check):
     axes = plt.axis()
     plt.plot(axes[:2], -np.log10([tol, tol]), 'k:', label='tolerance')
 
-    plt.suptitle(f'Test iterative methods for tol {tol}')
+    plt.title(f'test iterative methods for tol {tol}')
     plt.ylabel('accuracy')
     plt.xlabel('N iter')
     plt.legend()
+
     plt.show()

@@ -18,15 +18,13 @@ def test_stiff():
     Q: почему даже метод Розенброка иногда уменьшает шаг почти до нуля?
     """
     t0 = 0
-    t1 = 800*np.pi
+    t1 = 2500
 
     mu = 1000
     y0 = np.array([2., 0.])
     ode = VanDerPol(y0, mu)
 
-    fig1, ax1 = plt.subplots()
-    fig2, (ax21, ax22) = plt.subplots(1, 2)
-    fig3, ax3 = plt.subplots()
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
     colors = 'rgbcmyk'
     for i, (method, adapt_type) in enumerate(
@@ -42,29 +40,16 @@ def test_stiff():
                                            atol=1e-6, rtol=1e-3)
         print(f'{method.name}: {len(ts)-1} steps, {ode.get_call_counter()} RHS calls')
 
-        ax1.plot([y[0] for y in ys],
-                 [y[1] for y in ys],
-                 f'{colors[i]}.--', label=method.name)
+        axs[0, 0].plot([y[0] for y in ys], [y[1] for y in ys], f'{colors[i]}.--', label=method.name)
+        axs[0, 1].plot(ts[:-1], np.diff(ts), f'{colors[i]}.--', label=method.name)
+        axs[1, 0].plot(ts, [y[0] for y in ys], f'{colors[i]}.--', label=method.name)
+        axs[1, 1].plot(ts, [y[1] for y in ys], f'{colors[i]}.--', label=method.name)
 
-        ax21.plot(ts,
-                  [y[0] for y in ys],
-                  f'{colors[i]}.--', label=method.name)
-        ax22.plot(ts,
-                  [y[1] for y in ys],
-                  f'{colors[i]}.--', label=method.name)
+    axs[0, 0].legend(), axs[0, 0].set_title('y(x)')
+    axs[0, 1].legend(), axs[0, 1].set_title('dt(t)')
+    axs[1, 0].legend(), axs[1, 0].set_title('x(t)')
+    axs[1, 1].legend(), axs[1, 1].set_title('y(t)')
 
-        ax3.plot(ts[:-1],
-                 np.array(ts[1:]) - np.array(ts[:-1]),
-                 f'{colors[i]}.--', label=method.name)
-
-    ax1.set_xlabel('x'), ax1.set_ylabel('y'), ax1.legend()
-    fig1.suptitle(f'test_stiff: Van der Pol, mu={mu:.2f}, y(x)')
-
-    ax21.set_xlabel('t'), ax21.set_ylabel('x'), ax21.legend()
-    ax22.set_xlabel('t'), ax22.set_ylabel('y'), ax22.legend()
-    fig2.suptitle(f'test_stiff: Van der Pol, mu={mu:.2f}, x(t)')
-
-    ax3.set_xlabel('t'), ax3.set_ylabel('dt'), ax3.legend()
-    fig3.suptitle(f'test_stiff: Van der Pol, mu={mu:.2f}, dt(t)')
-
+    fig.suptitle(f'test_stiff: Van der Pol, mu={mu:.2f}')
+    fig.tight_layout()
     plt.show()

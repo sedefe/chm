@@ -71,7 +71,7 @@ def test_quad_degree():
     plt.legend()
     plt.ylabel('accuracy')
     plt.xlabel('node_count')
-    plt.suptitle(f'test quad')
+    plt.title(f'test quad')
     plt.show()
 
 
@@ -132,5 +132,5 @@ def test_quad_gauss_degree():
     plt.legend()
     plt.ylabel('accuracy')
     plt.xlabel('node count')
-    plt.suptitle(f'test quad gauss')
+    plt.title(f'test quad gauss')
     plt.show()

@@ -39,7 +39,7 @@ def test_composite_quad(n_nodes):
         ax[i].plot(x, k*x+b, 'b:', label=f'{k:.2f}*x+{b:.2f}')
         ax[i].plot(x, aitken_degree*x+b, 'm:', label=f'aitken ({aitken_degree:.2f})')
         ax[i].plot(x, accuracy, 'kh', label=f'accuracy for x^{degree}')
-        ax[i].set_title(f'{n_nodes}-node CQ for x^{degree}')
+        ax[i].set_title(f'y(x) = x^{degree}')
         ax[i].set_xlabel('log10(n_intervals)')
         ax[i].set_ylabel('accuracy')
         ax[i].legend()
@@ -47,6 +47,9 @@ def test_composite_quad(n_nodes):
         if n_nodes < degree:
             assert np.abs(aitken_degree - k) < 0.5, \
                 f'Aitken estimation {aitken_degree:.2f} is too far from actual {k:.2f}'
+
+    fig.suptitle(f'{n_nodes}-node composite quad')
+    fig.tight_layout()
 
     plt.show()
 
@@ -100,6 +103,8 @@ def test_composite_quad_degree(v):
 
     fig.suptitle(f'variant #{v} (alpha={alpha:4.2f}, beta={beta:4.2f})\n'
                  f'aitken estimation: {aitken_degree:.2f}')
+    fig.tight_layout()
+
     plt.show()
 
 
@@ -134,7 +139,7 @@ def test_quad_vs_cq():
     plt.legend()
     plt.ylabel('accuracy')
     plt.xlabel('log10(n_evals)')
-    plt.suptitle(f'test quad vs composite quad')
+    plt.title(f'test quad vs composite quad')
     plt.show()
 
 

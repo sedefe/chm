@@ -55,11 +55,10 @@ class TestInterpolation:
             ax1.plot(xs, ys, f'{color}.')
             ax2.plot(xs_dense, get_accuracy(ys_dense, ys_dense_num), f'{color}-', label=label)
 
-        ax1.set_title(f'{fname}')
-        ax1.legend()
-
-        ax2.set_title('accuracy')
-        ax2.legend()
+        ax1.legend(), ax1.set_title('y(x)')
+        ax2.legend(), ax2.set_title('accuracy')
+        fig.suptitle(f'{fname}')
+        fig.tight_layout()
 
         plt.show()
 
@@ -162,11 +161,9 @@ class TestInterpolation:
                 ax1.plot(xs, ys, f'{color}.')
                 ax2.plot(xs_dense, get_accuracy(ys_dense, ys_dense_num), f'{color}{style}', label=label)
 
-        ax1.set_title(f'y(x)')
         ax1.axis([a, b, -1, 6])
-        ax1.legend()
-
-        ax2.set_title('accuracy')
-        ax2.legend()
+        ax1.legend(), ax1.set_title(f'y(x)')
+        ax2.legend(), ax2.set_title('accuracy')
+        fig.tight_layout()
 
         plt.show()

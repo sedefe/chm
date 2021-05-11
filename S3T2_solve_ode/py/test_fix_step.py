@@ -27,7 +27,7 @@ def test_one_step():
     ts = np.arange(t0, t1+dt, dt)
 
     exact = ode[ts].T
-    _, (ax1, ax2) = plt.subplots(1, 2)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
     ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
 
     colors = 'rgbcmyk'
@@ -44,16 +44,15 @@ def test_one_step():
         n_calls = ode.get_call_counter()
         print(f'One-step {method.name}: {len(y)-1} steps, {n_calls} function calls')
 
-        ax1.plot(ts,
-                 [_y[0] for _y in y],
-                 f'{colors[i]}.--', label=method.name)
-        ax2.plot(ts,
-                 get_accuracy(exact, y),
-                 f'{colors[i]}.--', label=method.name)
+        ax1.plot(ts, [_y[0] for _y in y], f'{colors[i]}.--', label=method.name)
+        ax2.plot(ts, get_accuracy(exact, y), f'{colors[i]}.--', label=method.name)
 
-    ax1.set_xlabel('t'), ax1.set_ylabel('y'), ax1.legend()
-    ax2.set_xlabel('t'), ax2.set_ylabel('accuracy'), ax2.legend()
-    plt.suptitle('test_one_step')
+    ax1.legend(), ax1.set_title('y(t)')
+    ax2.legend(), ax2.set_title('accuracy')
+
+    fig.suptitle('test_one_step')
+    fig.tight_layout()
+
     plt.show()
 
 
@@ -75,7 +74,7 @@ def test_multi_step():
         RungeKuttaMethod(collection.rk4_coeffs),
         ExplicitEulerMethod(),
     ]:
-        _, (ax1, ax2) = plt.subplots(1, 2)
+        fig, (ax1, ax2) = plt.subplots(1, 2)
 
         ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
         for p, c in adams_coeffs.items():
@@ -91,7 +90,9 @@ def test_multi_step():
             ax1.plot(t_adams, [y[0] for y in y_adams], '.--', label=label)
             ax2.plot(t_adams, err, '.--', label=label)
 
-        ax1.set_xlabel('t'), ax1.set_ylabel('y'), ax1.legend()
-        ax2.set_xlabel('t'), ax2.set_ylabel('accuracy'), ax2.legend()
-        plt.suptitle(f'test_multi_step\none step method: {one_step_method.name}')
+        ax1.legend(), ax1.set_title('y(t)')
+        ax2.legend(), ax2.set_title('accuracy')
+        fig.suptitle(f'test_multi_step\none step method: {one_step_method.name}')
+        fig.tight_layout()
+
     plt.show()

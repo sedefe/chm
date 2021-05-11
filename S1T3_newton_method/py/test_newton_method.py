@@ -21,8 +21,7 @@ def test_solve_scalar(f, x0):
     """
     interval = -10, 10
 
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-    fig.suptitle(f)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5))
 
     # plot reference line
     xs_ref = np.linspace(*interval, 1001)
@@ -41,13 +40,16 @@ def test_solve_scalar(f, x0):
         ax1.plot([xs[i + 1], xs[i + 1]], [0, ys[i + 1]], 'g:')
     ax1.plot(xs, ys, 'b*')
 
-    ax1.set_xlabel('x')
-    ax1.set_ylabel('y')
-
     # plot accuracy
     ax2.plot(-np.log10(np.abs(ys)), 'b.:')
+
+    ax1.set_title('y(x)')
+    ax2.set_title('accuracy')
     ax2.set_xlabel('N step')
-    ax2.set_ylabel('Accuracy')
+
+    fig.suptitle(f)
+    fig.tight_layout()
+
     plt.show()
 
 
@@ -85,7 +87,8 @@ def test_solve_plane(f, x0, y0):
     # plot accuracy
     plt.figure()
     plt.plot(-np.log10(np.abs(zs)), 'b.:')
-    plt.suptitle(p.title)
+    plt.title(p.title)
     plt.xlabel('N step')
-    plt.ylabel('Accuracy')
+    plt.ylabel('accuracy')
+
     plt.show()
