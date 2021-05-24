@@ -83,7 +83,7 @@ class EmbeddedRungeKuttaMethod(RungeKuttaMethod):
 class EmbeddedRosenbrockMethod(OneStepMethod):
     """
     Вложенный метод Розенброка с параметрами (A, G, gamma, b, e)
-    Подробности: https://dl.acm.org/doi/10.1145/355993.355994 (уравнение 2)
+    Подробности: http://www.hysafe.org/science/eAcademy/docs/ACMTransactionsOnMathematicalSoftware_v8_p93to113.pdf (уравнение 2)
     """
     def __init__(self, coeffs: collection.EmbeddedRosenbrockScheme):
         super().__init__(**coeffs.__dict__)
