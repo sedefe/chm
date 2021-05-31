@@ -52,7 +52,7 @@ def test_quad_degree():
     max_degree = 7
     max_nodes = 7
 
-    for deg in range(max_degree):
+    for deg in range(max_degree+1):
         p = Monome(deg)
         y0 = p[x0, x1]
 
@@ -88,9 +88,9 @@ def test_weighted_quad_degree():
     beta = 0.88
 
     max_degree = 7
-    for deg in range(1, max_degree):
+    for deg in range(1, max_degree+1):
         p = Monome(deg)
-        xs = np.linspace(x0, x1, 6)[1:-1]  # 4 points => accuracy degree is 3
+        xs = np.linspace(x0, x1, 6)[1:-1]
 
         res = quad(p, x0, x1, xs, a=x0, alpha=alpha)
         ans = moments(deg, x0, x1, a=x0, alpha=alpha)[-1]
@@ -113,13 +113,14 @@ def test_quad_gauss_degree():
     """
     x0, x1 = 0, 1
 
-    max_degree = 8
+    max_degree = 10
+    max_nodes = 5
 
-    for deg in range(max_degree):
+    for deg in range(max_degree+1):
         p = Monome(deg)
         y0 = p[x0, x1]
 
-        node_counts = range(1, 6)
+        node_counts = range(1, max_nodes+1)
         Y = [quad_gauss(p, x0, x1, node_count) for node_count in node_counts]
         accuracy = get_accuracy(Y, y0 * np.ones_like(Y))
 
