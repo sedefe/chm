@@ -20,7 +20,7 @@ def test_one_step():
     """
     y0 = np.array([0., 1.])
     t0 = 0
-    t1 = np.pi/2
+    t1 = np.pi
     dt = 0.1
 
     ode = Harmonic(y0, 1, 1)
@@ -63,7 +63,7 @@ def test_multi_step():
     """
     y0 = np.array([0., 1.])
     t0 = 0
-    t1 = 1.
+    t1 = np.pi
     dt = 0.1
 
     f = Harmonic(y0, 1, 1)
