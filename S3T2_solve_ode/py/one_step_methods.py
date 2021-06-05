@@ -23,6 +23,7 @@ class OneStepMethod:
 class ExplicitEulerMethod(OneStepMethod):
     """
     Явный метод Эйлера (ничего менять не нужно)
+    https://youtu.be/v-pbGAts_Fg?t=47
     """
     def __init__(self):
         super().__init__(name='Euler (explicit)', p=1)
