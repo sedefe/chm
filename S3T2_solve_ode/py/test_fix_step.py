@@ -21,37 +21,38 @@ def test_one_step():
     y0 = np.array([0., 1.])
     t0 = 0
     t1 = np.pi
-    dt = 0.1
 
     ode = Harmonic(y0, 1, 1)
-    ts = np.arange(t0, t1+dt, dt)
 
-    exact = ode[ts].T
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
-    ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
+    for dt in [0.1, 0.01]:
+        ts = np.arange(t0, t1+dt, dt)
 
-    colors = 'rgbcmyk'
-    for i, method in enumerate(
-            [
-                ExplicitEulerMethod(),
-                ImplicitEulerMethod(),
-                RungeKuttaMethod(collection.rk4_coeffs),
-                RungeKuttaMethod(collection.dopri_coeffs),
-            ]
-    ):
-        ode.clear_call_counter()
-        _, y = fix_step_integration(method, ode, y0, ts)
-        n_calls = ode.get_call_counter()
-        print(f'One-step {method.name}: {len(y)-1} steps, {n_calls} function calls')
+        exact = ode[ts].T
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 4))
+        ax1.plot(ts, [e[0] for e in exact], 'k', label='Exact')
 
-        ax1.plot(ts, [_y[0] for _y in y], f'{colors[i]}.--', label=method.name)
-        ax2.plot(ts, get_accuracy(exact, y), f'{colors[i]}.--', label=method.name)
+        colors = 'rgbcmyk'
+        for i, method in enumerate(
+                [
+                    ExplicitEulerMethod(),
+                    ImplicitEulerMethod(),
+                    RungeKuttaMethod(collection.rk4_coeffs),
+                    RungeKuttaMethod(collection.dopri_coeffs),
+                ]
+        ):
+            ode.clear_call_counter()
+            _, y = fix_step_integration(method, ode, y0, ts)
+            n_calls = ode.get_call_counter()
+            print(f'One-step {method.name}: {len(y)-1} steps, {n_calls} function calls')
 
-    ax1.legend(), ax1.set_title('y(t)')
-    ax2.legend(), ax2.set_title('accuracy')
+            ax1.plot(ts, [_y[0] for _y in y], f'{colors[i]}.--', label=method.name)
+            ax2.plot(ts, get_accuracy(exact, y), f'{colors[i]}.--', label=method.name)
 
-    fig.suptitle('test_one_step')
-    fig.tight_layout()
+        ax1.legend(), ax1.set_title('y(t)')
+        ax2.legend(), ax2.set_title('accuracy')
+
+        fig.suptitle(f'test_one_step, dt={dt}')
+        fig.tight_layout()
 
     plt.show()
 
